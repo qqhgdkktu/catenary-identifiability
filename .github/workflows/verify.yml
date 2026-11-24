@@ -24,5 +24,7 @@ jobs:
           lint: 'false'
           use-github-cache: 'false'
           use-mathlib-cache: 'false'
-      - name: Check proofs and exact examples
+      - name: Check the local classification and exact examples
         run: python3 verify.py --fetch --require-classification
+      - name: Check proved global multiplicity statements and rational certificates
+        run: python3 global-multiplicity/verify_global.py --fetch

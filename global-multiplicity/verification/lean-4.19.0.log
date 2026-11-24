@@ -1,0 +1,49 @@
+Local verification on macOS arm64. Pinned mathlib and base Chain builds were available in the cache.
+All global proof modules compiled from source into a fresh temporary directory.
+Local path prefixes are abbreviated below.
+
++ lake env lean --version
+Lean (version 4.19.0, arm64-apple-darwin23.6.0, commit 6caaee842e94, Release)
++ lake build Chain
+Build completed successfully.
++ lake env lean --root=global-multiplicity/lean -j 2 -s 65536 -o <scratch>/GlobalCofactors.olean global-multiplicity/lean/GlobalCofactors.lean
++ lake env lean --root=global-multiplicity/lean -j 2 -s 65536 -o <scratch>/GlobalKrylov.olean global-multiplicity/lean/GlobalKrylov.lean
++ lake env lean --root=global-multiplicity/lean -j 2 -s 65536 -o <scratch>/GlobalLift.olean global-multiplicity/lean/GlobalLift.lean
++ lake env lean --root=global-multiplicity/lean -j 2 -s 65536 -o <scratch>/GlobalPhysical.olean global-multiplicity/lean/GlobalPhysical.lean
+'Catenary.GlobalMultiplicity.data_iff_curves' depends on axioms: [propext, Classical.choice, Quot.sound]
++ lake env lean --root=global-multiplicity/lean -j 2 -s 65536 -o <scratch>/GlobalUpper.olean global-multiplicity/lean/GlobalUpper.lean
++ lake env lean --root=global-multiplicity/lean -j 2 -s 65536 -o <scratch>/GlobalFive.olean global-multiplicity/lean/GlobalFive.lean
+Try this: ring_nf
+Try this: ring_nf
+Try this: ring_nf
+'Catenary.GlobalFive.exact_real_derivatives' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.GlobalFive.physical_pair' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.GlobalFive.five_seed' depends on axioms: [propext, Classical.choice, Quot.sound]
++ lake env lean --root=global-multiplicity/lean -j 2 -s 65536 -o <scratch>/GlobalFour.olean global-multiplicity/lean/GlobalFour.lean
+'Catenary.GlobalMultiplicity.FourAudit.no_three' depends on axioms: [propext, Classical.choice, Quot.sound]
++ lake env lean --root=global-multiplicity/lean -j 2 -s 65536 -o <scratch>/GlobalVariational.olean global-multiplicity/lean/GlobalVariational.lean
++ lake env lean --root=global-multiplicity/lean -j 2 -s 65536 -o <scratch>/GlobalFourSharp.olean global-multiplicity/lean/GlobalFourSharp.lean
+'Catenary.GlobalMultiplicity.FourAudit.sharp_four_leak_two' depends on axioms: [propext, Classical.choice, Quot.sound]
++ lake env lean --root=global-multiplicity/lean -j 2 -s 65536 -o <scratch>/GlobalSpectralBridge.olean global-multiplicity/lean/GlobalSpectralBridge.lean
++ lake env lean --root=global-multiplicity/lean -j 2 -s 65536 -o <scratch>/GlobalGainPhi.olean global-multiplicity/lean/GlobalGainPhi.lean
+'Catenary.GlobalGainPhi.gain_div_dc_eq_phi' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.GlobalGainPhi.terminal_gain_div_dc_eq_phi' depends on axioms: [propext, Classical.choice, Quot.sound]
++ lake env lean <scratch>/KernelAudit.lean
+Axiom audit passed for 1531 theorems
+Catenary.GlobalMultiplicity.SharpCount : Prop
+'Catenary.GlobalMultiplicity.FourAudit.sharp_four_leak_two' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.GlobalFive.five_seed' depends on axioms: [propext, Classical.choice, Quot.sound]
+Negative control: Lean rejected 3457 in place of 3456.
++ python3 global-multiplicity/verify_multiplicity.py
+seed 4 2 determinants -1 2
+seed 5 4 determinants 3456 -4698
+seed 4 1 determinants 2 -1
+leak 1 vectors (1, 1, 1, 1, 2, 1, 1) (1, 1, 1, 2, 1, 1, 1)
+previous four-chamber coordinates: -311040 -198720 -103680 -51840 (factor -12p)
+physical q/D(0) equals the Gram minimum: 30 models
+symmetric family: endpoint zeros, normalization and transverse derivatives for n=4..12
+lifts A (n,ell) (6, 5) L 100
+lifts B (n,ell) (6, 4) L 1000
+lifts AB (n,ell) (7, 5) L 100,1000
+lifts BAB (n,ell) (8, 5) L 1000,10000,100000
+Passed the stated partial formal audit and exact arithmetic checks.

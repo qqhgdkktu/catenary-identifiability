@@ -12,6 +12,10 @@ If the inlet is between the outputs, the criterion always holds. Otherwise, coun
 
 The manuscript proves both directions for arbitrary length. [The Lean model](Chain/Model.lean) defines the forced experiment and generic local identifiability. [The main Lean theorem](Chain/Classification.lean) uses that model. A [four-compartment counterexample](Chain/GlobalCounterexample.lean) proves that global ambiguity can persist on an open set even when the local criterion holds.
 
+## Positive regular fibers with outputs at 3 and n
+
+A second [manuscript and verification package](global-multiplicity/README.md) determines the maximum number of positive regular solutions with inlet 1 and measured compartments 3 and $n$, for every $n\ge4$. The maximum is one if the leak is at a measured compartment and two at all other leak locations. The English manuscript gives an all-length analytical proof. The Lean verification of this second result is partial. [English PDF](global-multiplicity/paper/positive-multiplicity.pdf) · [LaTeX source](global-multiplicity/paper/positive-multiplicity.tex)
+
 ## Reproduce the checks
 
 Install [elan](https://github.com/leanprover/elan) and Python 3. From the repository root, run

@@ -1,0 +1,505 @@
+% Self-contained source. Build with Tectonic, or run XeLaTeX twice.
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb,amsthm,mathtools,booktabs,microtype}
+\usepackage[a4paper,left=27mm,right=27mm,top=24mm,bottom=24mm,headheight=14pt]{geometry}
+\usepackage{xcolor,fancyhdr}
+\definecolor{ink}{HTML}{234452}
+\usepackage[unicode,colorlinks=true,linkcolor=ink,citecolor=ink,urlcolor=ink,
+ pdfauthor={Mikita Aharodni},pdftitle={Positive regular fibers of a catenary compartmental model with two outputs}]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newcommand{\R}{\mathbb R}
+\newcommand{\id}{\mathbf 1}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\Res}{\operatorname{Res}}
+\newcommand{\dd}{\mathrm d}
+\DeclareMathOperator{\supp}{supp}
+\setlength{\emergencystretch}{2em}
+\setlength{\parskip}{.18em}
+\raggedbottom
+\fancyhf{}\fancyhead[L]{\small Positive regular fibers of a catenary model}
+\fancyhead[R]{\small M. Aharodni}\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{.2pt}\pagestyle{fancy}
+\begin{document}
+\thispagestyle{plain}
+\begin{center}
+{\LARGE\bfseries Positive regular fibers of a catenary\\[3pt] compartmental model with two outputs\par}
+\vspace{.7em}
+{\large Mikita Aharodni\par}
+\vspace{.25em}
+{\small Research manuscript for independent review\quad $\cdot$ \quad 24 November 2026\par}
+\end{center}
+\begin{abstract}
+Consider a bidirected path of \(n\ge4\) compartments with an inlet at the first
+compartment, amount measurements at the third and last compartments, and a
+single leak at a known site \(\ell\). We determine the maximum number of
+positive regular rate vectors consistent with the same two output trajectories.
+The maximum is one if the leak is at either measured compartment and two at
+every other leak location. The upper bound follows by expressing the distal
+gain as a concave minimum on an affine interval of endpoint spectral weights
+of a Jacobi matrix. A five-compartment example and two extension operations
+give sharpness for interior leaks at every chain length.
+\end{abstract}
+\noindent\textit{Keywords.} Structural identifiability, compartmental models,
+inverse spectral problems, Jacobi matrices, positive fibers.
+
+\section{Model and main result}\label{sec:model}
+For \(1\le r<n\), write \(a_r>0\) for the transfer rate from \(r\) to \(r+1\)
+and \(b_r>0\) for the reverse rate. The single leak has unknown rate \(h>0\)
+at a prescribed site \(\ell\). With \(a_n=b_0=0\), the compartment matrix
+has entries
+\[
+ A_{r+1,r}=a_r,\qquad A_{r,r+1}=b_r,\qquad
+ A_{rr}=-a_r-b_{r-1}-h\id_{\{r=\ell\}}.
+\]
+All other entries vanish. The experiment is \(x'=Ax+e_1u,\ x(0)=0\), with
+known continuous input \(u\) and observed amounts \(x_3,x_n\). Rates form the
+vector \(\theta=(a_1,\ldots,a_{n-1},b_1,\ldots,b_{n-1},h)\).
+
+Let \(D(s)=\det(sI-A)\), let \(W(s)\) be the characteristic polynomial of
+the principal block on sites \(4,\ldots,n\), and put
+\(p=a_1a_2,\ q=\prod_{r=1}^{n-1}a_r\). Cofactor expansion along the path
+gives the two transfer functions
+\begin{equation}\label{eq:transfer}
+ e_3^\top(sI-A)^{-1}e_1=\frac{pW(s)}{D(s)},\qquad
+ e_n^\top(sI-A)^{-1}e_1=\frac{q}{D(s)} .
+\end{equation}
+The second numerator is a positive constant. It therefore determines \(q\)
+and the monic \(D\) from the reduced fraction. Multiplying the first transfer
+function by \(D\) recovers \(pW\), whose leading coefficient is \(p\).
+These conclusions include cancellations in the first transfer function.
+Equality of the two transfer functions is equivalent to equality of the two
+zero-state responses for every input. For the converse it even suffices to
+use the constant unit input and differentiate its step response.
+
+Define \(F_{n,\ell}(\theta)\) by listing the nonleading coefficients of
+\(D,W\), each in \emph{ascending} order, followed by \(p,q\). Its domain
+is \(\Theta=(0,\infty)^{2n-1}\) and its target has dimension
+\(n+(n-3)+2=2n-1\). We call a point regular if
+\(\det \dd F_{n,\ell}(\theta)\ne0\). Define
+\[
+ M(n,\ell)=\max_y\#\{\theta\in\Theta:F_{n,\ell}(\theta)=y,\
+                           \det\dd F_{n,\ell}(\theta)\ne0\}.
+\]
+\begin{theorem}\label{thm:main}
+For every \(n\ge4\) and prescribed leak location \(1\le\ell\le n\),
+\[
+ M(n,\ell)=
+ \begin{cases}
+  1,&\ell\in\{3,n\},\\
+  2,&\ell\notin\{3,n\}.
+ \end{cases}
+\]
+In the second case, two distinct positive regular preimages persist on a
+nonempty open set of data.
+\end{theorem}
+
+Local identifiability on bidirected trees with a single input and a single
+output is characterized in \cite[Theorem~5.2]{bortner}. Multiple observation
+sites on paths are discussed in \cite[\S6]{ahmed}. A placement criterion for
+local identifiability and its formal verification are given in the companion
+note \cite{placement}. Here the inlet and outputs are fixed. The quantity in
+Theorem~\ref{thm:main} counts regular points in the positive real domain and
+takes a maximum over attainable data. The usual identifiability degree and the
+general question in \cite[Question~5.3]{meshkat} concern a different count.
+
+\section{Physical coordinates and minors}
+Let \(c_r=\sqrt{a_rb_r}\), \(\beta_r=c_r^2\). The matrix \(-A\) is
+diagonally similar to a symmetric tridiagonal matrix \(T\) with off-diagonal
+entries \(-c_r\). It is positive definite since
+\[
+ v^\top T v=\sum_{r=1}^{n-1}
+   (\sqrt{a_r}v_r-\sqrt{b_r}v_{r+1})^2+h v_\ell^2.
+\]
+If the right-hand side vanishes, the value \(v_\ell=0\) propagates along
+every edge. Conversely, for any positive definite tridiagonal \(T\) with
+strictly negative off-diagonals \(-c_r\), set \(w=T^{-1}e_\ell\).
+Every entry of \(w\) is positive. Indeed, for sufficiently large \(z>0\),
+\(I-T/z\) is entrywise nonnegative and has spectral radius less than one.
+Its powers contain a positive contribution along every path, so the Neumann
+series for \(T^{-1}\) is strictly positive. The inverse correspondence is
+\begin{equation}\label{eq:gauge}
+ a_r=c_r w_{r+1}/w_r,\qquad b_r=c_r w_r/w_{r+1},\qquad h=1/w_\ell .
+\end{equation}
+In fact \(A=-\diag(w)T\diag(w)^{-1}\) has column sums
+\(-\id_{\{r=\ell\}}/w_\ell\). Conversely any positive scaling producing a
+physical matrix solves \(Tw=t e_\ell\) for some \(t>0\), and scaling by
+\(1/t\) gives the above normalization. The two coordinate changes are smooth.
+
+Write \(L_j(s),R_j(s)\) for the determinants of \(sI+T\) on the intervals
+\([1,j]\), \([j,n]\). Empty determinants are one. Put \(E=L_2,\ H=L_{n-1}\),
+\(K=\prod_{r=3}^{n-1}\beta_r\), so \(W=R_4\). For \(\ell<n\), let \(C_\ell\)
+denote the determinant on \([\ell+1,n-1]\). The following relations will be used:
+\begin{align}
+ p&=E(0) &&(\ell\ge3),\label{eq:p}\\
+ K&=qW(0)/p &&(\ell\le3),\label{eq:K}\\
+ q&=H(0)-D(0)C_\ell(0)/R_{\ell+1}(0) &&(\ell<n),\label{eq:q}\\
+ q&=H(0) &&(\ell=n).\nonumber
+\end{align}
+For completeness, the three-term determinant recurrence at zero gives
+\(L_{j-1}(0)=\prod_{r<j} a_r\) for \(j\le\ell\) and
+\(R_{j+1}(0)=\prod_{r=j}^{n-1} b_r\) for \(j\ge\ell\). This proves
+\eqref{eq:p}, \eqref{eq:K} and the terminal case. For \(\ell<n\) apply
+the complementary-minor identity
+\[
+ H R_{\ell+1}-D C_\ell=L_{\ell-1}\prod_{r=\ell}^{n-1}\beta_r
+\]
+at zero and divide by \(R_{\ell+1}(0)>0\). The same identity, applied to sites
+3 and \(n\), gives
+\begin{equation}\label{eq:minor}
+ WH-DB=K E,\qquad B=\det((sI+T)_{[4,n-1]}).
+\end{equation}
+Both identities also follow from Desnanot--Jacobi applied to the principal
+interval between the distinguished sites after eliminating its exterior
+blocks, or directly by the tridiagonal recurrence.
+
+\section{The two-dimensional spectral fiber}
+Assume throughout this section that \(\gcd(D,W)=1\). Write
+\(0<\lambda_1<\cdots<\lambda_n\) for the eigenvalues of \(T\). Irreducible
+tridiagonality makes each eigenvalue simple and each endpoint component of
+an eigenvector nonzero, by the three-term recurrence. The spectral weights
+at \(e_n\) satisfy
+\[
+ \rho_i>0,\qquad \sum_i\rho_i=1,\qquad
+ H(s)/D(s)=\sum_i \rho_i/(s+\lambda_i).
+\]
+With \(P=K E\), identity \eqref{eq:minor} and residues give
+\begin{equation}\label{eq:weights}
+ \rho_i=\frac{P(-\lambda_i)}{W(-\lambda_i)D'(-\lambda_i)},\qquad
+ \sum_i\frac{P(-\lambda_i)}{W(-\lambda_i)D'(-\lambda_i)}=1 .
+\end{equation}
+\begin{lemma}\label{lem:coords}
+Let \(D,W\) be real monic coprime polynomials of degrees \(n,n-3\), with
+\(D(s)=\prod_{i=1}^n(s+\lambda_i)\) and \(0<\lambda_1<\cdots<\lambda_n\).
+A positive physical realization exists exactly when a polynomial \(P\) of
+degree at most two satisfies \eqref{eq:weights} with every \(\rho_i>0\).
+For any prescribed leak location, these polynomials are in bijection with
+the physical realizations. When nonempty, they form an open convex subset
+of an affine plane. Writing \(E(s)=s^2+es+f\), the coefficients
+of \(D,W\) together with \(e,f\) are local smooth coordinates.
+\end{lemma}
+\begin{proof}
+Given such weights, orthogonalize \(1,x,\ldots,x^{n-1}\) for the discrete
+measure \(\sum_i\rho_i\delta_{\lambda_i}\). The multiplication operator by
+\(x\) gives the unique Jacobi matrix with the specified endpoint measure,
+after reversing indices and alternating basis signs to obtain the convention
+for \(T\). Its eigenvalues are positive. For \(0\le k\le n-4\),
+\[
+ \sum_i\rho_i W(-\lambda_i)(-\lambda_i)^k
+   =\sum_i\frac{P(-\lambda_i)(-\lambda_i)^k}{D'(-\lambda_i)}=0
+\]
+by the leading coefficient of Lagrange interpolation, since the numerator
+has degree at most \(n-2\). Thus the monic orthogonal polynomial of degree
+\(n-3\) is \((-1)^{n-3}W(-x)\). It is the characteristic polynomial of the
+first \(n-3\) sites in reversed order, proving that the reconstructed tail
+has polynomial \(W(s)\). Its own polynomial \(K E\) in \eqref{eq:minor}
+agrees with \(P\) at \(n\) distinct nodes and hence identically. In
+particular the coefficient of \(s^2\) in \(P\) is strictly positive.
+
+With \(E\) monic, put
+\begin{equation}\label{eq:alpha}
+ \alpha_i=\frac{E(-\lambda_i)}{W(-\lambda_i)D'(-\lambda_i)},\qquad
+ S=\sum_i\alpha_i,\qquad \rho_i=\alpha_i/S,\quad K=1/S.
+\end{equation}
+The sorted simple roots, \(\alpha_i\) and the coefficients of the
+orthonormal polynomials depend smoothly on nearby data. The Gram determinants
+are positive and the signs of the off-diagonals are prescribed. Positivity
+of all \(\alpha_i\) persists under small independent changes of \(D,W,e,f\),
+and the construction just given yields a smooth inverse via \eqref{eq:gauge}.
+\end{proof}
+The inverse spectral problem with the two spectra prescribed is also treated
+by Castillo and Gordillo-Núñez \cite[Lemmas~2.1, 3.1 and Theorem~3.1]{castillo}.
+The remaining gain conditions determine the count below.
+
+\section{A variational upper bound}
+For \(0\le m\le n-1\), set
+\begin{equation}\label{eq:phi}
+ \Phi_m(\rho)=\min_{\deg r\le m,\ r(0)=1}
+   \sum_{i=1}^n\frac{\rho_i}{\lambda_i}\,r(\lambda_i)^2 .
+\end{equation}
+\begin{lemma}\label{lem:phi}
+The distal gain satisfies \(q/D(0)=\Phi_{n-\ell}(\rho)\).
+For fixed nodes, \(\Phi_m\) is concave in the weights and real analytic on
+the positive orthant.
+\end{lemma}
+\begin{proof}
+Write \(r(x)=1-xv(x)\) with \(\deg v<m\) and \(z=v(T)e_n\). Its energy is
+\(e_n^\top T^{-1}e_n-2e_n^\top z+z^\top Tz\). The Krylov columns
+\(e_n,\ldots,T^{m-1}e_n\) span the last \(m\) coordinates: column \(j\),
+starting at \(j=0\), first reaches site \(n-j\) with nonzero coefficient
+\((-1)^j\prod_{t=n-j}^{n-1}c_t\). The minimum subtracts from
+\(e_n^\top T^{-1}e_n\) the last diagonal entry of the inverse of the trailing
+principal block of order \(m\), taking this correction as zero when \(m=0\).
+With \(m=n-\ell\), the two entries are \(H(0)/D(0)\) and
+\(C_\ell(0)/R_{\ell+1}(0)\). Equation~\eqref{eq:q} and its terminal case give the claim.
+
+Each candidate energy is linear in \(\rho\), so its infimum is concave.
+For \(\mu_j=\sum_i\rho_i\lambda_i^j\), \(b_j=\mu_j\), and
+\(G_{jk}=\mu_{j+k+1}\) (\(0\le j,k<m\)), completing the square gives
+\begin{equation}\label{eq:gram}
+ \Phi_m=\mu_{-1}-b^\top G^{-1}b .
+\end{equation}
+The weighted Vandermonde Gram matrix \(G\) is positive definite for distinct
+positive nodes and positive weights. This also proves attainment and analyticity.
+\end{proof}
+
+\begin{proposition}\label{prop:upper}
+The number of positive regular preimages is at most two at every data point,
+and at most one if \(\ell=3\) or \(\ell=n\).
+\end{proposition}
+\begin{proof}
+First suppose that \(D,W\) are coprime. If \(\ell\ge3\), fixing \(p\) imposes
+\(P(0)=p[s^2]P\) by \eqref{eq:p}. This homogeneous nonzero linear equation
+is independent of the normalization in \eqref{eq:weights} whenever they have
+a common solution. Their positive intersection is an affine interval.
+If \(\ell\le2\), fixing \(p,q\) fixes \(K=qW(0)/p=[s^2]P\). This also cuts
+out an affine interval unless it is constant on the normalization plane.
+In the latter case the pair \((K,q)\), equivalently \((p,q)\), has rank at
+most one on that plane. Such points are singular by Lemma~\ref{lem:coords}.
+
+On the resulting interval of weights the remaining equation is
+\(\Phi_{n-\ell}=q/D(0)\). Three distinct points at this level give zero
+secant slopes on either side of the middle point. Concavity and
+differentiability force its derivative to vanish there, contrary to
+regularity in the coordinates of Lemma~\ref{lem:coords}. When \(\ell=3\),
+both \(P(0)=p[s^2]P\) and \([s^2]P=qW(0)/p\) are linear equations.
+When \(\ell=n\), the second observation is \(q=H(0)\), also linear in \(P\)
+by \eqref{eq:weights}. In either case an affine fiber through two positive
+points contains a segment, so neither endpoint is locally isolated.
+
+Finally, choose any finite collection of distinct positive regular
+preimages at the same data. By the inverse function theorem they continue
+in disjoint positive neighborhoods over one common open set of data.
+The resultant \(\Res(D,W)\) is a nonzero polynomial on the ambient coefficient
+space, so this open set contains coprime data. The bounds already proved
+apply to the collection.
+\end{proof}
+
+\section{Leaks at sites \texorpdfstring{\(1,2,3,n\)}{1, 2, 3 and n}}\label{sec:boundary}
+Set \(T_0=n,\ t_j=j-(n+1)/2,\ \lambda_j=T_0+t_j\) for \(1\le j\le n\),
+and let \(a_*=(n-3)/2,\ b_*=(n-1)/2\). Put
+\(\mu_j=T_0+j-n/2\) for \(2\le j\le n-2\). These are the midpoints of
+the gaps between the \(\lambda_j\) other than the two outermost gaps. Use
+positive spectral variable \(x\) and write
+\[
+ \widehat D(x)=\prod_{j=1}^n(x-\lambda_j),\qquad
+ \widehat W(x)=\prod_{j=2}^{n-2}(x-\mu_j),\qquad
+ \Delta_j=\widehat W(\lambda_j)\widehat D'(\lambda_j).
+\]
+Take \(\widehat E_u(x)=(x-T_0)^2+u(x-T_0)-a_*b_*\), \(-1<u<1\).
+In the \(s\)-variable \(E_u(s)=\widehat E_u(-s)\).
+The \(\Delta_j\) are positive at the two endpoints and negative at every
+interior node, by counting factors to the right. The same signs hold for
+\(\widehat E_u(\lambda_j)\): at \(u=\pm1\) its roots in \(t=x-T_0\)
+are \((-b_*,a_*)\) and \((-a_*,b_*)\), respectively. The intermediate signs follow by interpolation in \(u\).
+Thus \(\alpha_j=\widehat E_u(\lambda_j)/\Delta_j>0\). Reflection gives
+\(\Delta_{n+1-j}=\Delta_j\) and \(\sum_j t_j/\Delta_j=0\), so \(S\) and
+\(K=1/S\) are constant and the normalized weights are affine in \(u\).
+
+For \(\ell=1,2\), \(m=n-\ell\ge n-2\). Exactly \(n-2\) support nodes survive
+at either end of the interval. The polynomial
+\(\prod_{\lambda\in \supp}(1-x/\lambda)\) on that limiting support is an
+admissible test polynomial with limiting energy zero. In the interior the
+attained minimum is positive, since no polynomial of degree \(m<n\)
+normalized at zero vanishes at all \(n\) nodes. Concavity now gives two
+crossings with nonzero derivative at a level between zero and the maximum.
+They have the same \(q\) and \(K\), hence the same \(p=qW(0)/K\).
+
+To verify the full Jacobian, allow
+\(\widehat E_{u,v}(x)=(x-T_0)^2+u(x-T_0)+v\).
+Then \(S=c_2+c_0v\), and the residues of
+\(1/(\widehat D\,\widehat W)\) give
+\[
+ c_0=\sum_j\frac1{\Delta_j}
+ =-\sum_{j=2}^{n-2}\frac1{\widehat D(\mu_j)\widehat W'(\mu_j)}<0.
+\]
+Both factors in each product on the right have the same sign. Consequently
+\(K_v=-c_0/S^2\ne0\), while \(K_u=0\) and \(q_u\ne0\) at the crossings.
+Lemma~\ref{lem:coords} proves their full regularity.
+
+For \(\ell=3,n\), use \(u=0,\ v=-a_*b_*\). Now
+\(p=T_0^2-T_0u+v\). At \(\ell=3\) the independent differentials of \(p,K\)
+give a regular point through \(q=Kp/W(0)\). At \(\ell=n\), vary both
+variables with \(\dd v/\dd u=T_0\) to hold \(p\) fixed. Then
+\[
+ \frac{\dd\alpha_j}{\dd u}=\frac{\lambda_j}{\Delta_j},\qquad
+ \frac{\dd \Phi_0}{\dd u}=\frac{c_0}{S}(1-T_0\Phi_0).
+\]
+Symmetry of the normalized weights gives
+\(T_0\Phi_0=\sum_j\rho_j T_0^2/(T_0^2-t_j^2)>1\): each term in the weighted
+average is at least one and the endpoint weights are positive. This supplies
+a regular point for the other terminal case.
+
+\section{Interior leaks and a five-compartment seed}
+Suppose \(4\le\ell<n\). Hold \(D,W,p\) fixed and set \(E_t(s)=s^2+ts+p\).
+Use \eqref{eq:alpha} to define \(\alpha_i(t),S(t),\rho_i(t)\), and abbreviate
+\(\Phi_m(\rho(t))\) to \(\phi(t)\), \(m=n-\ell\).
+\begin{lemma}\label{lem:peak}
+If \(\alpha_i(t)>0\) on \([a,c]\) for every \(i\), and \(a<b<c\) satisfy
+\(\phi(b)>\max\{\phi(a),\phi(c)\}\), then there exist two distinct positive
+regular preimages of a common data vector.
+\end{lemma}
+\begin{proof}
+The map \(t\mapsto\rho(t)\) has the form \((A+tB)/(C+tD_1)\). It is injective:
+identical weights give identical \(P=KE_t\) by polynomial interpolation at
+the \(n\) nodes, and normalization of \(E_t\) then recovers \(t\).
+Its image is an affine interval and its speed is nonzero since the numerator
+of its derivative is the constant vector \(BC-AD_1\). In an affine
+coordinate along that interval \(\Phi_m\) is concave. Any level strictly
+between \(\max\{\phi(a),\phi(c)\}\) and \(\phi(b)\) has a crossing on each
+side of the middle point. The secant slope to the middle point bounds the
+derivative away from zero at each crossing. Since \(p=E_t(0)\) is the other
+independent coordinate at fixed \(D,W\), nonvanishing of \(\dd q/\dd t\)
+is precisely the remaining full-rank condition. Apply Lemma~\ref{lem:coords}.
+\end{proof}
+
+For \((n,\ell)=(5,4)\), take
+\begin{align*}
+ D(s)&=s^5+17s^4+96s^3+206s^2+150s+24,\\
+ W(s)&=s^2+7s+8,\qquad p=2.
+\end{align*}
+These polynomials are coprime, as \(D\bmod W=6s+24\) and \(W(-4)=-4\).
+For \(8\le k\le12\), where \(k\) is a scalar parameter, define
+\begin{align*}
+ P_k&=ks^2+(11k/2+6)s+2k,\\
+ H_k&=s^4+(k/4+12)s^3+(5k/2+38)s^2+(9k/2+36)s+k+6.
+\end{align*}
+Direct multiplication gives
+\(WH_k-D(s+2+k/4)=P_k\). The two positive physical rate vectors
+\begin{align}
+ \theta_A&=(1,2,3,1,\ 3,1,2,2,\ 2),\nonumber\\
+ \theta_B&=\left(\tfrac{16}{29},\tfrac{29}{8},\tfrac94,\tfrac43,\
+                 \tfrac{481}{232},\tfrac32,\tfrac89,3,\ \tfrac{16}{9}\right)
+                 \label{eq:seed}
+\end{align}
+give these \(D,W,p\), \(q=6\) and \(k=12,8\), respectively. This can be
+checked by the tridiagonal determinant recurrence. Their spectral weights
+are positive, and \eqref{eq:weights} is affine in \(k\), so the weights
+remain normalized and positive on the entire segment. The last diagonal
+entry of \(T\) is the difference of the respective subleading coefficients
+of \(D,H_k\), namely \(5-k/4\). Formula \eqref{eq:q} gives
+\[
+ q(k)=k+6-\frac{24}{5-k/4}.
+\]
+With \(t=11/2+6/k\), the three points \(a=6,\ b=61/10,\ c=25/4\)
+correspond to \(k=12,10,8\). Division by \(D(0)=24\) yields
+\[
+ (\phi(a),\phi(b),\phi(c))=(1/4,\,4/15,\,1/4).
+\]
+This proves the strict inequality in Lemma~\ref{lem:peak}. In the coordinate
+order of Section~\ref{sec:model} the full Jacobian determinants at \(\theta_A,\theta_B\)
+are respectively \(3456\) and \(-4698\).
+
+\section{Two extension operations}
+Start with an interior placement satisfying Lemma~\ref{lem:peak}. Adjoin a
+large node \(L\) and a new tail eigenvalue \(L-\delta>\max_i\lambda_i\), setting
+\[
+ D^+(s)=(s+L)D(s),\qquad W^+(s)=(s+L-\delta)W(s).
+\]
+Keep \(E_t\) unchanged. Formula \eqref{eq:alpha} gives exactly
+\begin{equation}\label{eq:extend}
+ \alpha_i^+(t)=\frac{\alpha_i(t)}
+ {(L-\lambda_i)(L-\delta-\lambda_i)},\qquad
+ \alpha_L^+(t)=\frac{E_t(-L)}{-\delta W(-L)D(-L)} .
+\end{equation}
+For sufficiently large \(L\) all weights are positive throughout \([a,c]\).
+Indeed, \(E_t(-L)\) is uniformly positive there, and the sign of
+\(W(-L)D(-L)\) is negative by their degrees. Coprimality persists for the
+choices below, since the new node and tail eigenvalue are distinct and exceed all
+old nodes and tail eigenvalues. The latter lie in the spectral interval by
+the principal submatrix interlacing inequalities. Lemma~\ref{lem:coords}
+thus gives a positive physical chain for each \(t\).
+
+\paragraph{Operation A: \((n,\ell)\mapsto(n+1,\ell+1)\).}
+Set \(\delta=L/2\). At each of the three fixed values of \(t\) the old
+normalized weights tend to their original values. The new normalized
+weight has order \(O(L^{6-2n})\), by \eqref{eq:extend}. Here \(m=n-\ell\)
+stays fixed. The contribution of the new node to the highest moment
+in \eqref{eq:gram}, of order \(2m-1\), is \(O(L^{5-2\ell})=o(1)\).
+All lower moments, including the inverse moment, converge. Invertibility
+of the limiting Gram matrix gives convergence of the three minima, and the
+strict inequality persists for a common finite \(L\).
+
+\paragraph{Operation B: \((n,\ell)\mapsto(n+1,\ell)\).}
+Fix \(\varepsilon>0\) and take \(\delta=L^{7-2n}/\varepsilon\).
+At each fixed \(t\), \eqref{eq:extend} implies
+\(L^2\alpha_i^+\to\alpha_i\) and \(L^2\alpha_L^+\to\varepsilon\). The new
+node thus has limiting mass \(\varepsilon/(S+\varepsilon)>0\). The residual
+degree increases from \(m\) to \(m+1\). We claim that
+\begin{equation}\label{eq:limit}
+ \Phi_{m+1}(\rho^+(t))\ \longrightarrow\
+ \frac{S(t)}{S(t)+\varepsilon}\Phi_m(\rho(t)).
+\end{equation}
+For the upper limit, test with \((1-x/L)r_*(x)\), where \(r_*\) is an old
+minimizer. The new-node energy vanishes and the old-node energy tends to
+the right-hand side of \eqref{eq:limit}.
+
+For the lower limit, choose a sequence realizing the lower limit of the
+energies and minimizers \(r_L\) along this sequence. Their energies are
+bounded by the preceding test. Every old weight has a positive limit, so the
+values of \(r_L\) at all old nodes are bounded. Since \(m+1<n\), evaluation
+at \(m+2\) fixed old nodes gives an invertible Vandermonde system, bounding
+all coefficients. At the new node \(r_L(L)=O(\sqrt L)\) by its positive
+limiting weight. After division by \(L^{m+1}\) the leading coefficient
+therefore tends to zero. A subsequence converges coefficientwise to a
+polynomial of degree at most \(m\) taking value one at zero. Its contribution
+from the old nodes is at least the right-hand side of \eqref{eq:limit},
+and the new-node contribution is nonnegative. This proves the lower bound.
+Now choose one sufficiently small \(\varepsilon>0\) so that the three
+limiting values retain the strict inequality, since each factor
+\(S(t)/(S(t)+\varepsilon)\) tends to one as \(\varepsilon\downarrow0\).
+Then choose a common sufficiently large finite \(L\).
+
+\begin{proof}[Completion of the proof of Theorem~\ref{thm:main}]
+Starting at \((5,4)\), apply A exactly \(\ell-4\) times to reach
+\((\ell+1,\ell)\), then B exactly \(n-\ell-1\) times. This covers every
+\(4\le\ell<n\). Lemma~\ref{lem:peak} gives sharpness there, and Section~\ref{sec:boundary}
+supplies the other leak locations. Proposition~\ref{prop:upper} gives the
+matching upper bounds. At any two distinct regular preimages the inverse
+function theorem supplies two disjoint positive branches over a common
+open neighborhood of their data.
+\end{proof}
+
+\section*{Verification and scope}
+The \href{https://github.com/qqhgdkktu/catenary-identifiability/tree/main/global-multiplicity}{accompanying repository} contains the source, exact certificates and formal proofs. The code computes the Jacobians at \eqref{eq:seed} over
+\(\mathbb{Q}\), checks the variational identity on 30 rational chains and
+tests both extensions, separately and in composition. The Lean~4 package
+verifies \(M(4,2)=2\), \(M(5,4)\ge2\), the physical observation map for all
+lengths, and several all-length spectral and variational lemmas. The full
+statement of Theorem~\ref{thm:main} is recorded in Lean. An end-to-end
+formal derivation for all \(n,\ell\) remains to be completed. The theorem is
+about regular positive fibers under exact observations. It does not enumerate
+singular fibers, infer the rate vector from noisy data, or determine the
+complex identifiability degree.
+
+\smallskip
+\noindent\textit{Contributions.} Prepared for review by Mikita Aharodni.
+The initial proof was developed with GPT Pro and reviewed and partly formalized using Codex.
+
+\begin{thebibliography}{9}
+\bibitem{bortner} C. Bortner, E. Gross, N. Meshkat, A. Shiu and S. Sullivant.
+Identifiability of linear compartmental tree models and a general formula
+for input-output equations. \textit{Advances in Applied Mathematics}
+\textbf{146} (2023), 102490.
+\href{https://arxiv.org/abs/2106.08487v2}{arXiv:2106.08487v2}.
+\bibitem{ahmed} S. Ahmed, N. Crepeau, P. R. Dessauer Jr., A. Edozie,
+O. Garcia-Lopez, T. Grimsley, J. Lopez Garcia, V. Neri and A. Shiu.
+Identifiability of directed-cycle and catenary linear compartmental models.
+\textit{SIAM Journal on Applied Dynamical Systems} \textbf{25} (2026),
+no.~1, 304--350.
+\href{https://doi.org/10.1137/25M1728636}{doi:10.1137/25M1728636}.
+\href{https://arxiv.org/abs/2412.05283v3}{arXiv:2412.05283v3}.
+\bibitem{meshkat} N. Meshkat and A. Shiu. Structural identifiability of
+compartmental models: recent progress and future directions.
+\href{https://arxiv.org/abs/2507.04496v1}{arXiv:2507.04496v1} (2025).
+\bibitem{castillo} K. Castillo and G. Gordillo-Núñez. Wendroff's theorem beyond
+consecutive degrees and related inverse spectral problems.
+\href{https://arxiv.org/abs/2602.20894v1}{arXiv:2602.20894v1} (2026).
+\bibitem{placement} M. Aharodni (prepared for review). Two outputs in a
+catenary compartmental model. Research note and Lean formalization,
+\href{https://github.com/qqhgdkktu/catenary-identifiability/tree/v0.1.0}{version 0.1.0} (2026).
+\end{thebibliography}
+\end{document}
