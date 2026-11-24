@@ -1,0 +1,426 @@
+% Build with Tectonic or XeLaTeX (two passes).
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\usepackage[english]{babel}
+\usepackage{amsmath,amssymb,booktabs}
+\usepackage[a4paper,margin=25mm,top=23mm,bottom=24mm,headheight=14pt]{geometry}
+\usepackage{xcolor,fancyhdr}
+\definecolor{inkblue}{HTML}{1B405B}
+\usepackage[unicode,colorlinks=true,urlcolor=inkblue,linkcolor=inkblue,citecolor=inkblue,
+  pdfauthor={Mikita Aharodni},pdftitle={Two Outputs in a Catenary Compartmental Model},
+  pdfsubject={Generic local structural identifiability with a single known leak location}]{hyperref}
+\newcommand{\ind}{\mathbf{1}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\NN}{\mathcal{N}}
+\newcommand{\dd}{\mathrm{d}}
+\newcommand{\sect}[1]{\section{#1}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.42em plus 0.1em}
+\setlength{\emergencystretch}{2em}
+\renewcommand{\headrulewidth}{0.35pt}
+\fancyhf{}
+\fancyhead[L]{\small\color{inkblue} Catenary compartmental models}
+\fancyhead[R]{\small Mikita Aharodni}
+\fancyfoot[C]{\small\thepage}
+\pagestyle{fancy}
+\begin{document}
+\thispagestyle{plain}
+{\color{inkblue}\rule{\textwidth}{1pt}}\par
+\vspace{0.65em}
+{\raggedright\LARGE\bfseries Two Outputs in a Catenary\\[0.1em] Compartmental Model\par}
+\vspace{0.35em}
+{\large A placement criterion for local identifiability with one leak\par}
+\vspace{1em}
+{\bfseries Prepared for review by Mikita Aharodni}\par
+{\small\itshape 24 November 2026 \quad\textbullet\quad Research note for technical review}\par
+\vspace{0.8em}
+\textbf{Abstract.}
+Consider a labelled bidirected path with one known inlet, two distinct measured compartments, one known leak location, and independent positive unknown rates. We prove that all rates are generically locally structurally identifiable exactly when the inlet lies between the outputs or its distance to the nearer output exceeds the number of compartments beyond the farther output by at most two. The proof uses tridiagonal determinants, a common spectral point for two gain variations, and a coupling argument for an interior inlet. A Lean~4 formalization proves the criterion for the forced ODE with zero initial conditions. A four-compartment example shows that global ambiguity can persist on an open set. The placement rule also follows from the broader unrefereed classification in~[3].
+\vspace{0.6em}
+\par
+\noindent\textbf{Theorem (two outputs).}
+Let \(n\ge3\). A labelled bidirected chain \(1\leftrightarrow\cdots\leftrightarrow n\) has an input at \(i\), measurements of the amounts in compartments \(j<k\), and a single leak at a known compartment \(\ell\). All transfer and leak rates are independent, positive, and unknown. Under zero initial conditions, known input, and ideal observations, all \(2n-1\) rates are jointly generically locally structurally identifiable if and only if
+\begin{equation}
+                   \boxed{j+k-n-2\ \le i\ \le j+k+1}\,. \label{eq:criterion}
+\end{equation}
+The criterion is the same for every fixed location of the single leak. Here \emph{generic} means outside a proper algebraic subset of the positive parameter space. When the criterion holds, every such parameter point has a neighborhood in which equality of both output curves for every admissible input implies equality of the rate vectors.
+
+\noindent\textbf{Reading the criterion from the chain.}
+If \(j\le i\le k\), the criterion always holds, even if both outputs are far from the input. Otherwise, count the edges from the input to the nearer output and the compartments beyond the farther output. The former count must be at most the latter plus two. For an input to the left this is \(j-i\le n-k+2\), and for an input to the right it is \(i-k\le j+1\).
+
+Sections~1--7 give a direct proof for arbitrary chain length. Section~8 treats four compartments and gives examples on either side of the threshold. Appendices~A and B derive the same criterion from the broader classification stated in~[3].
+
+\sect{What the output curves determine}
+Set \(b_0=a_n=0\). Under the column convention \(x'=Ax+e_i u\), the only potentially nonzero entries of \(A\) are
+\[
+ A_{rr}=-d_r,\quad d_r=b_{r-1}+a_r+h\ind_{\{r=\ell\}},\qquad
+ A_{r+1,r}=a_r,\quad A_{r,r+1}=b_r\quad(1\le r<n),
+\]
+where the diagonal formula also applies at \(r=n\). For input at \(i\), the impulse response at output \(v\) is \(e_v^\top e^{tA}e_i\). Differentiating the response to the constant input \(u=1\) recovers this impulse response. Conversely, convolution with the impulse response gives the output for any continuous input. Its Laplace transform is \(G_{vi}=e_v^\top(sI-A)^{-1}e_i\). Thus equality of both outputs for all inputs with zero initial conditions is equivalent to equality of the two rational transfer functions.
+
+Write \(L_t\) for the leading principal determinant of \(sI-A\) on \([1,t]\) and \(R_t\) for the trailing principal determinant on \([t,n]\). The empty determinants \(L_0,R_{n+1}\) equal one, and \(D=L_n\). In particular, \(L_1=s+d_1\) and
+\(L_t=(s+d_t)L_{t-1}-a_{t-1}b_{t-1}L_{t-2}\) for \(2\le t\le n\).
+Let \(m=\min(i,v)\), \(M=\max(i,v)\), and let \(\pi_{iv}\) be the product of the rates along the directed path from \(i\) to \(v\). It is \(\prod_{r=i}^{v-1}a_r\) for \(i<v\), \(\prod_{r=v}^{i-1}b_r\) for \(v<i\), and one for \(i=v\). Then
+\begin{equation}
+ G_{vi}(s)=\frac{\pi_{iv}L_{m-1}(s)R_{M+1}(s)}{D(s)}. \label{eq:transfer}
+\end{equation}
+For \(i<v\), delete row \(i\) and column \(v\) of \(sI-A\). The resulting minor is block upper triangular. The two outside diagonal blocks give \(L_{i-1}\) and \(R_{v+1}\), and the middle block is triangular with diagonal \(-a_i,\ldots,-a_{v-1}\). The cofactor sign \((-1)^{i+v}\) cancels the sign \((-1)^{v-i}\). Transposition gives the case \(v<i\). If \(v=i\), only the two outside diagonal blocks remain. See also [2, Proposition~2.14, Theorem~5.1, and Remark~5.3].
+
+Write \(N_j,N_k\) for the unreduced numerators in \eqref{eq:transfer}, and let \(q=\gcd(D,N_j,N_k)\) be monic. The least common monic denominator of the two reduced fractions is \(D/q\). At each root of \(D\), the multiplicity retained is the larger of the two pole orders. In this common representation the observed coefficients are precisely those of \(D/q,N_j/q,N_k/q\). The next lemma shows that \(q=1\) generically.
+
+
+\sect{Cancellation, necessity, and an inlet between the outputs}
+\noindent\textbf{Lemma.} For each fixed \(\ell\), outside a proper algebraic subset of parameter space, each fraction in \eqref{eq:transfer} is reduced. Each nonconstant numerator, after normalization to be monic, has simple roots.
+
+\noindent\emph{Proof.}
+It suffices to find one physical parameter point at which the relevant resultants and discriminants are nonzero. Take the symmetric tridiagonal matrix \(J\) with diagonal entries \(-10r\) and off-diagonal entries \(1\). Every principal interval block has simple eigenvalues, since its eigenvector is determined by its first coordinate via the tridiagonal recurrence. Blocks on disjoint intervals have disjoint spectra by Gershgorin's theorem. Consequently every eigenvector of \(J\) is nonzero in every coordinate. An interior zero would force a common eigenvalue of the two blocks to its left and right, while a zero at an endpoint forces the whole vector to vanish.
+
+The matrix \(-J\) is positive definite and \(w=(-J)^{-1}e_\ell\) is positive in every coordinate. To see the latter, write \(-J=H-T\) with \(H=\operatorname{diag}(10r)\). Then \(\|H^{-1}T\|_\infty<1\), and every pair of vertices is connected by a path of positive entries of \(H^{-1}T\). The Neumann series therefore gives strict positivity. The matrix \(A=\operatorname{diag}(w)J\operatorname{diag}(w)^{-1}\) has positive edge rates and column sums \(-\ind_{\{r=\ell\}}/w_r\), so it is a physical parameter point. In the spectral expansion of the resolvent of \(J\), the residue at entry \((v,i)\) is the product of two nonzero coordinates of a unit eigenvector. Diagonal similarity preserves its nonvanishing. Simplicity of the numerator roots in \eqref{eq:transfer} follows from the simple, disjoint spectra of the two outside blocks. \(\square\)
+
+\noindent\textbf{Necessity for \(i<j<k\).}
+The two fractions in \eqref{eq:transfer} are determined by \(D,L_{i-1},R_{j+1},R_{k+1}\) and by the two scalars \(\pi_{ij},\pi_{ik}\). Each of the four polynomials is monic. Their free coefficients together with the two scalars number at most
+\begin{equation}
+ m=n+(i-1)+(n-j)+(n-k)+2=3n+i+1-j-k. \label{eq:count}
+\end{equation}
+This bound holds even if some coefficients are dependent or a factor cancels. If \(j+k>n+i+2\), then \(m<2n-1\). The polynomial map from the rates to these \(m\) coordinates has maximal rank \(r\le m\). The rank is constant in a neighborhood of a generic point, where a maximal minor remains nonzero. By the constant-rank theorem, the local fiber has dimension \(2n-1-r>0\). Both transfer functions are constant on that fiber. The positive parameter domain is open, so the indistinguishable competitors can be chosen positive. Reflecting the chain gives the necessary condition \(i-k\le j+1\) for an inlet to the right of both outputs.
+
+\noindent\textbf{Sufficiency for \(j\le i\le k\).}
+Theorem~5.2 of Bortner et al.~[1] characterizes generic local identifiability on a bidirected tree with one input and one output. The criterion is at most one leak and distance at most one between the input and the output. In particular, if \(i=j\) or \(i=k\), measurement at \(i\) already suffices. Adding an output preserves local identifiability [2, Proposition~2.20].
+
+Suppose \(j<i<k\). The lemma gives \(D\) and both numerators from the transfer functions. Dividing by the leading coefficients gives
+\[
+             L_{j-1}R_{i+1},\qquad L_{i-1}R_{k+1}.
+\]
+Each monic factorization has fixed factor degrees. At a generic point the roots of each product are simple. Surround them by pairwise disjoint disks. In a sufficiently small parameter neighborhood, each root stays in its disk, and its assignment to a physical factor is preserved by continuity. The degree-zero factors equal one. Any two parameter vectors in that neighborhood with the same outputs therefore have the same \(R_{i+1}\) and \(L_{i-1}\). In particular, they have the same diagonal transfer function
+\[
+                   G_{ii}=\frac{L_{i-1}R_{i+1}}{D}.
+\]
+Intersect this neighborhood with one on which the experiment with both input and output at \(i\) identifies the rates locally, as in [1, Theorem~5.2]. The two parameter vectors must then coincide. Section~3 also gives a direct reconstruction from \(G_{ii}\) for the zero-initial-state experiment, including when a measured output is already at \(i\).
+
+
+\sect{Symmetric tridiagonal coordinates}
+Let \(J\) be the symmetric tridiagonal matrix with the same diagonal as \(A\) and with positive off-diagonal entries \(c_r=\sqrt{a_rb_r}\). Write \(\beta_r=c_r^2\). The identity
+\[
+ -v^\top Jv=\sum_{r=1}^{n-1}(\sqrt{a_r}\,v_r-\sqrt{b_r}\,v_{r+1})^2+h v_\ell^2
+\]
+shows that \(J\) is negative definite. For fixed \(\ell\), these matrices provide coordinates for the physical rates. Set
+\begin{equation}
+ w=(-J)^{-1}e_\ell,\qquad A=\operatorname{diag}(w)J\operatorname{diag}(w)^{-1}.
+ \label{eq:gauge}
+\end{equation}
+Here \(w>0\). If \(t>\lambda_{\max}(-J)\), then \(I+J/t\) is entrywise nonnegative and has spectral radius less than one. In the Neumann series for \((-J)^{-1}\), each pair of coordinates is connected by a path of positive weight. Column \(r\) of \(A\) sums to \(-\ind_{\{r=\ell\}}/w_r\), so \(h=1/w_\ell\). Conversely, the ratios \(w_{r+1}/w_r=\sqrt{a_r/b_r}\) implement the similarity for any physical \(A\), and the column sums give \((-J)w=h w_\ell e_\ell\). The normalization in \eqref{eq:gauge} fixes the common scale. Both coordinate changes are smooth. The principal interval determinants of \(sI-A\) and \(sI-J\) agree.
+
+\noindent\textbf{Reconstruction from consecutive determinants.}
+For a block of length \(t\), let \(M_t,M_{t-1}\) be the characteristic polynomials of the block and its prefix with the last vertex removed. For \(t\ge2\), dividing \(M_t\) by \(M_{t-1}\) gives the quotient \(s-J_{tt}\), with local indexing, and the remainder \(-\beta_{t-1}M_{t-2}\). The leading coefficient of the remainder determines \(\beta_{t-1}>0\). Recursion down to a single vertex recovers all diagonal entries and all positive \(c_r\). To remove the first vertex instead, read the chain in reverse. The reconstruction is smooth near each such pair because all leading coefficients used as divisors are nonzero.
+
+\noindent\textbf{Direct reconstruction from \(G_{ii}\).}
+Let \(m_-(s),m_+(s)\) be the diagonal resolvents at the ends of the left and right blocks adjacent to \(i\). The Schur complement gives
+\[
+ G_{ii}^{-1}=s-J_{ii}-\beta_{i-1}m_--\beta_i m_+ .
+\]
+A missing branch contributes zero. The polynomial part gives \(J_{ii}\). Generically the two branch spectra are disjoint, by the separated spectral example in Section~2. In a small neighborhood each pole can be assigned to its original branch. The sum of the appropriate partial fractions recovers each \(\beta m\). Since \(m(s)=1/s+O(s^{-2})\), this determines \(\beta\) and \(m\) separately. At the endpoint of an irreducible block each eigenvalue has nonzero residue. The monic numerator and denominator of \(m\) therefore give two consecutive determinants of the block. The preceding recursion and \eqref{eq:gauge} recover all rates locally.
+
+
+\sect{Polynomial data for an inlet at the first compartment}
+Assume \(i=1<j<k\). Set \(d=j-1\), \(r=n-k\), and \(g=k-j\), and assume \(d\le r+2\). Write \(\chi_{u:v}\) for the characteristic polynomial of \(J\) on \([u,v]\), with the empty polynomial equal to one. Use the notation
+\[
+ \begin{aligned}
+ D&=\chi_{1:n},& W&=\chi_{j+1:n},& U&=\chi_{k+1:n},\\
+ E&=\chi_{1:j-1},& B&=\chi_{j+1:k-1},& H&=\chi_{1:k-1},\\
+ K&=\prod_{t=j}^{k-1}\beta_t,& P&=K E .
+ \end{aligned}
+\]
+Generically, \(D,W,U\) can be read from \eqref{eq:transfer} after normalization. The leading numerator coefficients \(\pi_{1j},\pi_{1k}\) are also observed. We first determine which variations of \(J\) leave \(D,W,U\) unchanged to first order.
+
+\noindent\textbf{Determinant identity and reconstruction.} We have
+\begin{equation}
+                     D B=W H-U P . \label{eq:condensation}
+\end{equation}
+The determinant of the principal submatrix of \((sI-J)^{-1}\) on \(j,k\) equals \(EBU/D\) by the complementary principal minor identity, or by the Schur complement. Its diagonal entries are \(EW/D\) and \(HU/D\), and \eqref{eq:transfer} gives \(K(EU/D)^2\) for the product of its off-diagonal entries. Multiplying by \(D^2\) and cancelling \(EU\) gives the polynomial identity for all \(s\).
+
+We show that the coefficients of \(D,W,U,B,P\) locally recover \(J\) smoothly at a suitable point. Read \(K\) and \(E=P/K\) from \(P\). If \(r>0\), set \(V=\beta_k\chi_{k+2:n}\), with \(\deg V<r\). Expanding the determinant across edge \(k\) gives
+\[
+              W=U\chi_{j+1:k}-V B .
+\]
+For \(r>0\), \(\gcd(B,U)=1\) at the point chosen in Section~5. Multiplication by \(B\) is invertible in \(\mathbb R[s]/(U)\), so the residue class \(-W/B\) determines the representative \(V\) of degree less than \(r\). Its leading coefficient is \(\beta_k\). The pair \(U,V/\beta_k\) recovers the right tail by Section~3. For \(r=0\), set \(U=1,V=0\) and proceed directly to the middle block.
+
+Recover the block \([j+1,k]\) from \(\chi_{j+1:k}=(W+VB)/U\) and \(B\). For \(g=1\), it has one vertex and \(B=1\). Dividing \(K\) by \(\prod_{t=j+1}^{k-1}\beta_t\) gives \(\beta_j\). The polynomial \(\chi_{j+2:n}\) is now known, and expansion across edge \(j\) gives
+\[
+            L_j=(D+\beta_j E\chi_{j+2:n})/W .
+\]
+The pair \(L_j,E=L_{j-1}\) determines the remaining left block. Division by monic polynomials and the solution of an invertible linear system modulo \(U\) are smooth in the coefficients. Thus vanishing first variations of \(D,W,U,B,P\) imply \(\delta J=0\).
+
+
+\sect{The kernel of the three spectral observations}
+Until the spectral shift, take differentials at the reference matrix \(J_0\) from Section~2, with diagonal entries \(-10t\) and off-diagonal entries \(1\). The pairs \(P,B\), \(P,W\), and \(B,U\) are coprime, since the corresponding intervals are disjoint. If \(r>0\), the consecutive trailing determinants \(U,\chi_{k+2:n}\) are coprime by the recurrence in Section~3. The formula for \(W\) in Section~4 then gives \(\gcd(W,U)=1\). The same holds immediately if \(r=0\). The eigenvalues of \(J_0\) are all simple, and every eigenvector has all coordinates nonzero.
+
+Let \(T\) be the real vector space of symmetric tridiagonal variations \(\delta J\) for which \(\delta D=\delta W=\delta U=0\) as polynomials. Differentiating \eqref{eq:condensation} on \(T\) gives
+\[
+ U(B\,\delta P-P\,\delta B)= W(B\,\delta H-H\,\delta B).
+\]
+Coprimality of \(W,U\) gives the polynomial
+\begin{equation}
+ C=\frac{B\,\delta P-P\,\delta B}{W},\qquad
+ P\,\delta H-H\,\delta P=-D C .                         \label{eq:tangent}
+\end{equation}
+The second identity follows from \eqref{eq:condensation} and its differential. The map \(T\to\mathbb R[s]\), \(\delta J\mapsto C\), is linear and injective. Indeed, \(C=0\) gives \(B\,\delta P=P\,\delta B\). Since \(\gcd(P,B)=1\), we have \(B\mid\delta B\). As \(B\) is monic, \(\delta B\) has lower degree than \(B\), so \(\delta B=0\), including the case \(B=1\). Then \(\delta P=0\), and reconstruction from Section~4 gives \(\delta J=0\).
+
+Since \(\deg B=g-1\), \(\deg P=d\), and \(\deg W=g+r\), the degree bounds are
+\[
+        \deg C\le d-r-1,\qquad
+        \delta K=0\quad\Longrightarrow\quad\deg C\le d-r-2 .
+\]
+A polynomial with a negative upper bound on its degree is zero. When \(d\le r+2\), at most two directions remain. The space \(T_0=\{\delta J\in T:\delta K=0\}\) has dimension at most one. If it is nonzero, \(d=r+2\) and \(C\) is a nonzero constant for a generator of \(T_0\). For this generator, \(\delta P\) is nonzero. Otherwise \(P\delta B=-WC\), which is impossible since \(\deg P=d\ge2\) and \(\gcd(P,W)=1\). Thus \(\delta E=\delta P/K\) is a nonzero polynomial of degree less than \(n\).
+
+Choose a simple eigenvalue \(\lambda\) of \(J_0\) as follows. If \(T_0=0\), any eigenvalue works. Otherwise, choose \(\lambda\) such that \(\delta E(\lambda)\ne0\) for a generator of \(T_0\). Such a root exists among the \(n\) distinct roots of \(D\). The two functionals \(\delta E(\lambda),\delta H(\lambda)\) have trivial joint kernel on \(T\). If they both vanish, the second identity in \eqref{eq:tangent}, together with \(P=KE\) and \(D(\lambda)=0\), gives \(H(\lambda)E(\lambda)\delta K=0\). Both \(E(\lambda)\) and \(H(\lambda)\) are nonzero. By the three-term recurrence they are proportional to coordinates \(j,k\) of the eigenvector normalized to have first coordinate one. The variation therefore belongs to \(T_0\), where the choice of \(\lambda\) forces it to vanish.
+
+
+\sect{Two measured gains detect the remaining directions}
+We now relate the two functionals in Section~5 to physical rates for a fixed leak \(\ell\). Set \(J_z=J-zI\). In a neighborhood of \(J_0\), the matrix \(J_z\) is negative definite for \(z\ge0\). From \eqref{eq:gauge} and the telescoping product of \(a_t=c_t w_{t+1}/w_t\), for \(v=j,k\) we obtain
+\begin{equation}
+ g_v(z,J)=\pi_{1v}(J_z)
+ =\Bigl(\prod_{t=1}^{v-1}c_t\Bigr)
+ \frac{\operatorname{adj}(zI-J)_{v\ell}}{\operatorname{adj}(zI-J)_{1\ell}}.
+ \label{eq:gain}
+\end{equation}
+The right-hand side is rational in \(z\) and is defined for some negative \(z\) as well. In particular it is regular at \((z,J)=(\lambda,J_0)\). At a simple eigenvalue \(\lambda\), the adjugate is a nonzero multiple of \(\xi\xi^\top\), where \(\xi\) is the corresponding eigenvector. The first and \(\ell\)-th coordinates of \(\xi\) are nonzero by the choice of \(J_0\). The eigenvector recurrence from the left gives
+\[
+ \Bigl(\prod_{t=1}^{v-1}c_t\Bigr)\xi_v=L_{v-1}(\lambda)\xi_1,\qquad
+                    g_v(\lambda,J_0)=L_{v-1}(\lambda).
+\]
+This identity persists under small perturbations of \(J_0\) if \(\lambda\) is replaced by the corresponding simple eigenvalue branch \(\lambda(J)\).
+
+Fix \(\delta J\in T\) and differentiate along \(J_0+t\delta J\). From \(D(\lambda)=0\), \(D'(\lambda)\ne0\), and \(\delta D=0\), we get \(\delta\lambda=0\). The derivative at fixed \(z=\lambda\) is therefore the polynomial variation at that same argument:
+\[
+ d_J g_j(\lambda,J_0)[\delta J]=\delta E(\lambda),\qquad
+ d_J g_k(\lambda,J_0)[\delta J]=\delta H(\lambda).
+\]
+By Section~5 these two derivatives are jointly injective on \(T\). If \(\dim T>0\), choose a basis of \(T\) and a minor of order \(\dim T\) that is nonzero at \(\lambda\). This minor is rational in \(z\) and has finitely many zeros and poles. It is consequently nonzero for some \(z>0\). If \(T=0\), any \(z>0\) suffices.
+
+For the shifted matrix \(J_0-zI\), the spectral polynomials are \(D(s+z),W(s+z),U(s+z)\) of the original matrix. Translation in the argument is invertible on coefficient space and preserves the kernel \(T\) under \(\delta J_z=\delta J\). By \eqref{eq:gain}, the last two rows are now derivatives of the measured leading numerator coefficients. Thus the map
+\[
+             J_z\longmapsto(D_z,W_z,U_z,\pi_{1j},\pi_{1k})
+\]
+has full column rank at an admissible point. The shift preserves the eigenvectors of \(J_0\), so both outputs see every pole. Dividing by the positive leading numerator coefficients recovers \(W_z,U_z\) smoothly. In physical rate coordinates the Jacobian of the full coefficient map has a nonzero maximal minor at this point. The minor is polynomial, so the inverse function theorem applies off its zero set and the cancellation set from Section~2. This proves sufficiency for an endpoint inlet and every \(\ell\).
+
+\noindent\textbf{A cofactor check of the derivatives.}
+Set \(q=\operatorname{adj}(sI-J)e_\ell\), \(\gamma_t=\prod_{m=1}^{t-1}c_m\), and \(y_t=\gamma_t q_t\). For \(1\le t<n\), the equation \((sI-J)q=D e_\ell\) gives
+\[
+ y_{t+1}=(s-J_{tt})y_t-\beta_{t-1}y_{t-1}-D\gamma_t\ind_{\{t=\ell\}},
+ \qquad \beta_0=y_0=0 .
+\]
+Comparison with the recurrence for \(L_t\) gives \(y_v-L_{v-1}q_1=0\) for \(v\le\ell\) and \(y_v-L_{v-1}q_1=-D\gamma_\ell\chi_{\ell+1:v-1}\) for \(v>\ell\). Thus \(g_v-L_{v-1}\) is a multiple of \(D\) with a factor regular at \((\lambda,J_0)\), since \(q_1(\lambda)\ne0\). Both \(D(\lambda)\) and \(\delta D(\lambda)\) vanish in the calculation on \(T\). This gives the same two derivatives.
+
+
+\sect{Reattaching the compartments before an interior inlet}
+Now suppose \(1<i<j<k\) and \(j-i\le n-k+2\). Cut off the first \(p=i-1\) compartments. In the tail \(J_T=J_{[i,n]}\), which has length \(n-p\), the inlet is first and the counts \(j-i\) and \(n-k\) are unchanged. Take a physical full-rank point for this tail from Section~6, with a leak at \(\ell-p\) if \(\ell\ge i\), and at the first tail compartment if \(\ell<i\).
+
+Use two polynomials as coordinates for the left block together with edge \(p\):
+\[
+     S=L_p,\qquad V=\beta_p L_{p-1},\qquad
+     D=S D_T - V R_{i+1},\quad D_T=\det(sI-J_T).
+\]
+These give \(2p\) real coordinates. The polynomial \(S\) is monic of degree \(p\), and \(\deg V\le p-1\). For \(\beta_p>0\) the leading coefficient of \(V\) gives \(\beta_p\), and then \(S,V/\beta_p\) recover the left block smoothly by Section~3. When \(p=1\), \(S=s-J_{11}\) and \(V=\beta_1\).
+
+For \(v=j,k\), the leading numerator coefficient in \eqref{eq:transfer} is \((\prod_{t=i}^{v-1}c_t)w_v/w_i\). If \(\ell\ge i\), eliminating the left block from \((-J)w=e_\ell\) gives the equation for the tail coordinates \(w_T\)
+\[
+ \left(-J_T-\frac{V(0)}{S(0)}e_1e_1^\top\right)w_T=e_{\ell-p}.
+\]
+If \(\ell<i\), the tail satisfies \(w_T=c_p w_p(-J_T)^{-1}e_1\). The common factor cancels in \(w_v/w_i\). Thus both coefficients extend smoothly to a neighborhood of \(V=0\) when \(S(0)>0\). At \(V=0\), they equal the two physical gains in the chosen tail model.
+
+Consider the extended data map \((D,S,W,U,\pi_{ij},\pi_{ik})\), where \(W=R_{j+1}\) and \(U=R_{k+1}\). Choose a negative definite left block so that all \(p\) roots of \(S\) are simple and none is a root of \(R_{i+1}\). A sufficiently large negative diagonal shift of a fixed Jacobi block achieves this. At \(V=0\), any variation that leaves the data stationary has \(\delta S=0\) and
+\[
+                 0=\delta D=S\,\delta D_T -(\delta V)R_{i+1}.
+\]
+Evaluation at the roots of \(S\) forces \(\delta V=0\), because \(\deg\delta V<p\). Then \(\delta D_T=0\). All five tail data from Section~6 have zero variation, so \(\delta J_T=0\). The differential of the extended data map is injective.
+
+The nonzero minor persists at \(V=\varepsilon L_{p-1}\) for sufficiently small \(\varepsilon>0\). This is a physical point with \(c_p=\sqrt{\varepsilon}\), since the joined negative definite blocks remain negative definite for small coupling. Generically \(S,W,U\) can be separated locally from the monic numerators \(SW,SU\) by fixing the assignment of the simple roots (Section~2). Equivalently, the differential of multiplication is invertible for coprime monic factors of fixed degrees. The open full-rank set intersects this dense algebraically open set and the set with no cancellations. In the physical rates, the full coefficient map is polynomial. A maximal minor nonzero at one point gives full rank outside a proper algebraic set, and the inverse function theorem gives the desired local injectivity. Reflection \(t\mapsto n+1-t\) covers an inlet to the right. Together with Section~2, this proves \eqref{eq:criterion}. \(\square\)
+
+
+\sect{Four compartments and boundary placements}
+Place the input at compartment 1 and observe compartments 3 and 4. Set \(d_1=a_1\), \(d_2=b_1+a_2\), \(d_3=b_2+a_3\), and \(d_4=b_3\), then add \(h\) to \(d_\ell\) alone. With \(x(0)=0\), the system is
+\[
+ x'=Ax+e_1u,\quad
+ A=\begin{pmatrix}
+ -d_1&b_1&0&0\\a_1&-d_2&b_2&0\\0&a_2&-d_3&b_3\\0&0&a_3&-d_4
+ \end{pmatrix}\!,\quad D(s)=\det(sI-A).
+\]
+Let \(p=a_1a_2>0\). Cofactor expansion gives the entries in rows three and four of the first column of the resolvent:
+\begin{equation}
+ G_{31}(s)=\frac{p(s+d_4)}{D(s)},\qquad G_{41}(s)=\frac{p a_3}{D(s)}. \label{eq:four}
+\end{equation}
+The numerator of \(G_{41}\) is a nonzero constant. The monic denominator is therefore fully determined as \(D=s^4+c_3s^3+c_2s^2+c_1s+c_0\). The two fractions then give \(p,pd_4,pa_3\), even if the first fraction alone cancels. In particular, \(G_{41}/G_{31}=a_3/(s+d_4)\) determines \(a_3\) and \(d_4\) separately. If \(\ell=4\), then \(d_4=b_3+h\).
+
+Write \(F_c=(c_3,c_2,c_1,c_0,p,pd_4,pa_3)\). Let \(F\) have first four coordinates \(D(0),D(1),D(2),D(3)\) and last three coordinates \(p,N_3(0),N_4(0)\), using the numerators in \eqref{eq:four}. We compute both Jacobians at
+\[ \theta_*=(a_1,a_2,a_3,b_1,b_2,b_3,h)=(1,2,3,4,5,6,7). \]
+\begin{center}
+\begin{minipage}{\linewidth}\centering
+{\small\itshape Table 1. Exact Jacobian determinants at the positive witness.\par}\smallskip
+\begin{tabular}{cclrr}
+\toprule
+\(\ell\)&\(d_4(\theta_*)\)&\((c_3,c_2,c_1,c_0)\)&\(\det F_c'(\theta_*)\)&\(\det F'(\theta_*)\)\\
+\midrule
+1&6 &\((28,260,896,840)\)&\(-25\,920\)&\(-311\,040\)\\
+2&6 &\((28,225,476,210)\)&\(-16\,560\)&\(-198\,720\)\\
+3&6 &\((28,211,476,84)\)&\(-8\,640\)&\(-103\,680\)\\
+4&13&\((28,225,504,42)\)&\(-4\,320\)&\(-51\,840\)\\
+\bottomrule
+\end{tabular}
+\end{minipage}
+\end{center}
+The Jacobian for the change in the first four coordinates has rows \((t^3,t^2,t,1)\) for \(t=0,1,2,3\), since \(D(t)-t^4=c_3t^3+c_2t^2+c_1t+c_0\). The Vandermonde determinant is \(12\), because reversing four columns is an even permutation. This explains the ratio between the determinant columns.
+
+For each row, the determinant is a polynomial in the seven rates. Its nonzero table entry proves that its zero set is proper. Away from this set the inverse function theorem gives local injectivity. With one output, Bortner et al.~[1, Theorem~5.2] require distance at most one from the inlet. Here the distances are two and three. Each output alone is insufficient, while their joint observation gives full rank for each of the four leak locations.
+
+\noindent\textbf{An output near the inlet.}
+Suppose \(\min(|i-j|,|i-k|)\le1\). Section~2 covers an inlet between the outputs. For an exterior inlet the distance to the nearer output is at most one, while the right-hand side of the distance rule is at least two. This agrees with [1, Theorem~5.2] and [2, Proposition~2.20].
+
+\noindent\textbf{Two outputs far from the inlet.}
+Take \(n=7\), \(i=1\), and \(j=4\). For \(k=6\), we have \(j-i=3=n-k+2\), and all 13 rates are generically locally identifiable. Moving the farther output from 6 to 7 makes \(j-i=3>2\), and \eqref{eq:count} bounds the rank by 12. This disproves the assertion that two distinct outputs always suffice. The example also shows why the distance to the nearer output alone cannot decide identifiability. The four-compartment case illustrates how two distant outputs can together identify rates that neither can identify alone.
+
+
+\sect{Exact computations and formal verification}
+The supplementary script \texttt{verify\_chain.py} runs with
+\[
+                    \text{\ttfamily python3 verify\_chain.py}
+\]
+using Python 3.8 or later and its standard library. The script first computes \(D\) by the recurrence in Section~1. Each rate enters only one column of \(sI-A\), so each coefficient of \(D\) is affine in any one rate with the others fixed. The same holds for \(p,pd_4,pa_3\). A unit increment of a rate therefore gives the corresponding Jacobian column exactly for both maps in Section~8. The script constructs the coefficient map and the map using \(D(0),\ldots,D(3)\) separately. The Leibniz formula reproduces all eight integer determinants.
+
+A further check computes the Markov parameters \(e_v^\top A^t e_i\), for \(t=0,\ldots,2n-1\), directly from \(A\). These are the expansion coefficients of \(G_{vi}\) at \(s=\infty\). They suffice because a difference of two such fractions has denominator of degree at most \(2n\). Agreement of the first \(2n\) coefficients makes the difference \(O(s^{-2n-1})\), which is impossible for a nonzero numerator. Differentiating \(A^{t+1}e_i=A(A^te_i)\) gives the derivatives recursively. Gaussian elimination over \(\mathbb F_{65537}\) computes rank. The script records the positive integer samples and the order in which they are selected. It checks every placement \((i,j,k,\ell)\) with \(j<k\) for \(3\le n\le8\).
+
+\begin{center}
+\begin{minipage}{\linewidth}\centering
+{\small\itshape Table 2. Finite-field checks using Markov parameters.\par}\smallskip
+\begin{tabular}{lr}
+\toprule
+Total placements & \(3\,734\)\\
+Full rank \(2n-1\) modulo \(65\,537\) & \(3\,382\)\\
+Rank deficient at the sample & \(352\)\\
+Disagreements with \eqref{eq:criterion} & \(0\)\\
+\bottomrule
+\end{tabular}
+\end{minipage}
+\end{center}
+A second implementation works with full matrices. It computes the determinants in Section~8 by Bareiss elimination and differentiates the two transfer functions at \(2n\) frequencies using \(\delta G=G(\delta A)G\), with \(G=(sI-A)^{-1}\). It uses the prime \(1\,000\,000\,007\), and also checks reflection and reversal of the rate directions. The command is
+\begin{center}
+\verb|python3 independent_rank.py --through 16 --boundary 24 32|
+\end{center}
+\begin{center}
+\begin{minipage}{\linewidth}\centering
+{\small\itshape Table 3. Independent finite-field checks using the resolvent.\par}\smallskip
+\begin{tabular}{lrrr}
+\toprule
+Placements & Count & Full rank & Deficient at the sample\\
+\midrule
+All, \(3\le n\le16\) & \(112\,672\) & \(91\,168\) & \(21\,504\)\\
+Boundary and control cases, \(n=24\) & \(132\) & \(92\) & \(40\)\\
+Boundary and control cases, \(n=32\) & \(148\) & \(108\) & \(40\)\\
+\bottomrule
+\end{tabular}
+\end{minipage}
+\end{center}
+A nonzero minor modulo a prime, with invertible denominators, certifies a nonzero minor over \(\mathbb Q\). Section~2 supplies the universal upper bound for negative cases. Every tested placement attained its predicted rank bound. Sections~1--7 establish the conclusion for arbitrary \(n\).
+
+\smallskip
+\noindent\textbf{An example of actual cancellation.}
+For \(n=3\), \(i=\ell=2\), \((j,k)=(1,3)\), and all rates equal to one, both fractions have numerator \(s+1\) and denominator \((s+1)(s^2+4s+1)\). At this positive parameter point, the observed transfer functions have a smaller common denominator. The generic statement in Section~2 allows such exceptional points.
+
+
+\noindent\textbf{Local and global identifiability.}
+For the four-compartment placement in Section~8, let \(\ell=2\). In the parameter order used there, the two distinct positive vectors
+\[
+  (1,1,1,1,1,1,2)\qquad\text{and}\qquad(1,1,1,1,2,1,1)
+\]
+give \(D(s)=s^4+8s^3+18s^2+12s+2\), \(N_3(s)=s+1\), and \(N_4(s)=1\). Their Jacobian determinants for \(F\) are \(12\) and \(-24\), respectively. The inverse function theorem gives disjoint positive parameter neighborhoods whose images under \(F\) contain a common open set. Thus an open set of positive parameters has distinct positive partners with the same two transfer functions. The example, the determinants, and the open-set conclusion are formalized in \texttt{GlobalCounterexample.lean}.
+
+\noindent\textbf{Formal verification and availability.}\par
+The Lean~4.19.0 theorem \texttt{Catenary.}\allowbreak\texttt{physicalClassificationVerified} proves both directions for every admissible placement in the physical model, with the leak location fixed. The kernel checked the proof, and its axiom audit reports only \texttt{propext}, \texttt{Classical.choice}, and \texttt{Quot.sound}. The Lean proof uses a signed auxiliary parameter point with zero leak to establish that a maximal minor is a nonzero polynomial. It then proves the generic conclusion on strictly positive rates. The argument in Sections~5--7 constructs a positive full-rank point via a spectral shift. The manuscript, Lean sources, verification log, and exact computation scripts are available in the
+\href{https://github.com/qqhgdkktu/catenary-identifiability}{companion repository}.
+
+\noindent\textbf{AI assistance.}
+This note grew out of a problem posed by Mikita Aharodni. OpenAI models used through Codex contributed to developing the proof, writing the Lean formalization, reviewing the arguments, and translating the manuscript. This version is shared for independent specialist review.
+
+
+\appendix\sect{A previously proposed placement classification}
+Ahmed et al.~[2, Section~6] asked for a classification with multiple inputs or outputs. In September 2026, the anonymous preprint [3] stated a classification for arbitrary prescribed input, output, and leak sets. We summarize its Theorem~1 using its notation. The preprint is unrefereed. Its scope includes our setup, and Appendix~B shows how it yields the same criterion.
+
+\noindent\textbf{Notation.} Let \(I,O\subseteq[n]\) be nonempty and let \(L\subseteq[n]\) be the leak set. Write \(r(E,F)\) for the maximum number of pairwise disjoint closed intervals joining an element of \(E\) to an element of \(F\), allowing a singleton. The value is zero if either set is empty. Set \(W=I\cup O\). For any set of positive indices, initialize \(S,U\) to zero and process the indices \(t\) in increasing order:
+\[
+ S\gets\max(0,\min(2t-3,S+t-1)),\qquad U\gets\min(2t-1,U+t).
+\]
+If the hulls \([\min I,\max I]\) and \([\min O,\max O]\) are disjoint, reflect all labels if necessary so that \(\max I<a=\min O\). Write \(E=n+1-O\) and \(R=n+1-L\), with reflection applied elementwise.
+
+If \(L\ne\varnothing\), initialize \(A_*=0\). Process \(t\in I\) in increasing order, and let \(P\) be the processed prefix including \(t\). Set \(\epsilon=1-r(P,L)+r(P\setminus\{t\},L)\) and \(\nu=r(P,L\cup\{n\})-r(P,L)\). Update as follows:
+\[
+ A_*\gets
+ \begin{cases}
+ \max(0,\min(2t-3,A_*+t-1)),&t\le\min L,\\
+ \min(2t-3+\nu,A_*+t-1+\epsilon),&t>\min L .
+ \end{cases}
+\]
+Process \(t\in E\) in increasing order, starting with \(B_*=0\) and \(\nu_{\rm old}=0\). For the processed prefix \(Q\) including \(t\), set \(\epsilon=1-r(Q,R)+r(Q\setminus\{t\},R)\). First compute
+\[
+ B_*\gets\max(0,\min(2t-3+\epsilon+\nu_{\rm old},B_*+t-1+\epsilon)),
+\]
+and then set \(\nu_{\rm old}\gets r(Q,R\cup\{n\})-r(Q,R)\). Retain the intermediate values \(B_*(t)\). Put \(c=r(I,L)+r(O,L)-r(W,L)\). If \(\min L\ge a\), let \(t_0=\min\{t\in E:t\ge\max R\}\). Initialize \(C_*=B_*(t_0)+1\). Process the remaining \(t>t_0\) in \(E\) in increasing order with \(C_*\gets\min(2t-1,C_*+t)\).
+
+\noindent\textbf{Theorem 1 of [3].}
+For a labelled bidirected chain with \(n\ge2\), independent positive rates, and known coordinate inputs and outputs, the data are the full transfer matrix. The condition \(r(W,L)=|L|\) is necessary. When it holds and the input and output hulls overlap, the model is generically locally identifiable. When it holds and the hulls are disjoint, the model is generically locally identifiable if and only if the corresponding condition below holds:
+\begin{equation}
+\begin{array}{ll}
+ L=\varnothing & S(I)+U(E)\ge n-1,\\
+ L\ne\varnothing,\ \min L<a & A_*+B_*+c\ge n-1,\\
+ L\ne\varnothing,\ \min L\ge a & S(I)+C_*\ge n-1.
+\end{array}                                                     \label{eq:placement}
+\end{equation}
+The statement is from [3, Section~2.6, equations (8)--(10)]. The proofs of the thresholds are in Section~3 and the appendices of [3]. For the last two lines, see Sections~3.2--3.4 in particular. The corrections dated 27 October 2026 update two cross-references in Appendix~C.5.
+
+
+\sect{Specialization of Theorem 1 of [3]}
+Assume \(i<j<k\). Substitute \(I=\{i\}\), \(O=\{j,k\}\), and \(L=\{\ell\}\) in \eqref{eq:placement}. Then \(r(I,L)=r(O,L)=r(W,L)=1\). Any port can be joined to the sole leak, and two intervals incident to that leak cannot be disjoint. The source condition holds and \(c=1\). Write the reflected outputs as
+\[
+                     x=n+1-k,\qquad y=n+1-j,\qquad 1\le x<y .
+\]
+For the single input \(\epsilon=\nu=0\). Both applicable branches of the recurrence give \(A_*=S(I)=i-1\). If \(i=1\), the first branch uses the maximum with zero. If \(i\ge2\), then \(2i-3\ge i-1\).
+
+For the first reflected output \(x\), we have \(\epsilon=0\) and initially \(\nu_{\rm old}=0\), so \(B_*(x)=x-1\), including when \(x=1\). The new \(\nu_{\rm old}\) is also zero, since there is just one vertex in the prefix and its interval rank is already one. At the second output \(y\), we have \(\epsilon=1\), so
+\[
+                  B_*(y)=\min(2y-2,x+y-1)=x+y-1 .
+\]
+The equality uses \(x\le y-1\). It remains to evaluate the applicable line of \eqref{eq:placement} for each leak placement:
+\begin{center}
+\begin{minipage}{\linewidth}\centering
+{\small\itshape Table 4. Specialization by leak location.\par}\smallskip
+\begin{tabular}{lll}
+\toprule
+Leak location & Substitution in \eqref{eq:placement} & Left side of the threshold\\
+\midrule
+\(\ell<j\) & \(A_*+B_*(y)+c\) & \(i-1+x+y\)\\
+\(j\le\ell<k\) & \(t_0=y,\ C_*=B_*(y)+1=x+y\) & \(i-1+x+y\)\\
+\(k\le\ell\) & \(t_0=x,\ C_*(x)=x,\ C_*=\min(2y-1,x+y)\) & \(i-1+x+y\)\\
+\bottomrule
+\end{tabular}
+\end{minipage}
+\end{center}
+In the last row, \(x+y\le2y-1\). The cases \(\ell=j\) and \(\ell=k\) belong to the second and third rows, respectively. All three rows give
+\[
+           i-1+x+y\ge n-1
+           \quad\Longleftrightarrow\quad j+k\le n+i+2
+           \quad\Longleftrightarrow\quad j-i\le n-k+2 .
+\]
+Thus Theorem~1 of [3] gives the same threshold for \(i<j\). For \(i>k\), reflect every label by \(r\mapsto n+1-r\), preserving the inlet and reversing the order of the two outputs. This gives \(i-k\le j+1\). If \(j\le i\le k\), the overlap case of [3] applies and \eqref{eq:criterion} holds automatically. These cases exhaust all placements. \(\square\)
+
+\smallskip
+\begin{thebibliography}{9}
+
+\bibitem{Bortner} C. Bortner, E. Gross, N. Meshkat, A. Shiu, and S. Sullivant. Identifiability of linear compartmental tree models and a general formula for input-output equations. \emph{Adv. Appl. Math.} \textbf{146} (2023), 102490. \href{https://doi.org/10.1016/j.aam.2023.102490}{DOI}. \href{https://arxiv.org/pdf/2106.08487\#page=28}{Theorem 5.2}.
+\bibitem{Ahmed} S. Ahmed, N. Crepeau, P. R. Dessauer Jr., A. Edozie, O. Garcia-Lopez, T. Grimsley, J. Lopez Garcia, V. Neri, and A. Shiu. Identifiability of directed-cycle and catenary linear compartmental models. \emph{SIAM J. Appl. Dyn. Syst.} \textbf{25} (2026), 304--350. \href{https://doi.org/10.1137/25M1728636}{DOI}. \href{https://arxiv.org/html/2412.05283v3}{Propositions 2.14, 2.16, 2.20--2.21, Theorem 5.1, Remark 5.3, and Section 6}.
+\bibitem{Candidate} Anonymous. \emph{A placement criterion for catenary compartment models}. Version 0.1.0-candidate, 23 September 2026. \href{https://zenodo.org/records/22909460}{Preprint record (DOI 10.5281/zenodo.22909460)}. \href{https://github.com/ipitchford/catenary-placement-classification/blob/v0.1.0-candidate/paper.md}{Theorem 1 and proof}. \href{https://github.com/ipitchford/catenary-placement-classification/blob/main/CORRECTIONS.md}{Corrections}.
+\bibitem{OPT} A. Ovchinnikov, G. Pogudin, and P. Thompson. Input-output equations and identifiability of linear ODE models. \href{https://arxiv.org/abs/1910.03960}{Corollary 3}. It relates the coefficients of the transfer matrix to identifiable functions for strongly connected linear compartmental models with an input. Section~1 of the present note proves the observation equivalence at \(x(0)=0\) directly.
+
+
+\end{thebibliography}
+
+\medskip\noindent\emph{Review methods.} The checks in Sections~8--9 use explicit counterexamples and independently implemented exact computations. Related approaches to checking mathematical arguments are described by \href{https://terrytao.wordpress.com/advice-on-writing-papers/on-local-and-global-errors-in-mathematical-papers-and-how-to-detect-them/}{Terence Tao}, \href{https://arxiv.org/html/2602.10177v3\#S2}{Tony Feng et al., Section 2}, and \href{https://www.anthropic.com/research/riemann-zeta}{Anthropic's research team}.
+
+\end{document}

@@ -1,0 +1,119 @@
+Fresh project build directory: absent at start. Project has 61 Lean source files.
+
+Pinned dependency plausible: 77e08eddc486491d7b9e470926b3dbe50319451a; tracked sources clean.
+Pinned dependency LeanSearchClient: 25078369972d295301f5a1e53c3e5850cf6d9d4c; tracked sources clean.
+Pinned dependency importGraph: e6a9f0f5ee3ccf7443a0070f92b62f8db12ae82b; tracked sources clean.
+Pinned dependency proofwidgets: c4919189477c3221e6a204008998b0d724f49904; tracked sources clean.
+Pinned dependency aesop: 5d50b08dedd7d69b3d9b3176e0d58a23af228884; tracked sources clean.
+Pinned dependency Qq: fa4f7f15d97591a9cf3aa7724ba371c7fc6dda02; tracked sources clean.
+Pinned dependency batteries: f5d04a9c4973d401c8c92500711518f7c656f034; tracked sources clean.
+Pinned dependency Cli: 02dbd02bc00ec4916e99b04b2245b30200e200d0; tracked sources clean.
+Pinned dependency mathlib: c44e0c8ee63ca166450922a373c7409c5d26b00b; tracked sources clean.
+
+Reused pinned external dependency cache. All project proof modules compiled from source.
+Lean (version 4.19.0, arm64-apple-darwin23.6.0, commit 6caaee842e94, Release)
+Source check passed. The kernel dependency audit follows.
+✔ [2440/2500] Built Chain.AxiomAudit
+✔ [2441/2500] Built Chain.Placement
+✔ [2442/2500] Built Chain.PublishedRule
+✔ [2443/2500] Built Chain.Model
+✔ [2444/2500] Built Chain.Continuant
+✔ [2445/2500] Built Chain.Polynomial
+✔ [2446/2500] Built Chain.Dimension
+✔ [2447/2500] Built Chain.Resolvent
+✔ [2448/2500] Built Chain.PolynomialChain
+✔ [2449/2500] Built Chain.Gauge
+✔ [2450/2500] Built Chain.ResolventPhysical
+✔ [2451/2500] Built Chain.Dynamics
+✔ [2452/2500] Built Chain.Cancellation
+✔ [2453/2500] Built Chain.PolynomialReconstruction
+✔ [2454/2500] Built Chain.PhysicalInverse
+✔ [2455/2500] Built Chain.ResolventGeneral
+✔ [2456/2500] Built Chain.InputClass
+✔ [2457/2500] Built Chain.FiniteMoments
+✔ [2458/2500] Built Chain.Reflection
+✔ [2459/2500] Built Chain.ResolventData
+✔ [2460/2500] Built Chain.ODE
+✔ [2461/2500] Built Chain.Middle
+✔ [2462/2500] Built Chain.ThreeBlocks
+✔ [2463/2500] Built Chain.ResolventFormula
+✔ [2464/2500] Built Chain.Spectral
+✔ [2465/2500] Built Chain.RankWitness
+✔ [2466/2500] Built Chain.PrefixNodes
+✔ [2467/2500] Built Chain.MiddlePhysical
+✔ [2468/2500] Built Chain.SpectralGain
+✔ [2469/2500] Built Chain.Obstruction
+✔ [2470/2500] Built Chain.GaugePhysical
+✔ [2471/2500] Built Chain.Endpoint
+✔ [2472/2500] Built Chain.MiddleRecovery
+✔ [2473/2500] Built Chain.FullRank
+✔ [2474/2500] Built Chain.SpectralPhysical
+✔ [2475/2500] Built Chain.CoprimeWitness
+✔ [2476/2500] Built Chain.SeparatedWitness
+✔ [2477/2500] Built Chain.WitnessVariation
+✔ [2478/2500] Built Chain.ClosedChain
+✔ [2479/2500] Built Chain.EndpointExterior
+✔ [2480/2500] Built Chain.SignedWitness
+✔ [2481/2500] Built Chain.ClosedDifferential
+✔ [2482/2500] Built Chain.EndpointThreshold
+✔ [2483/2500] Built Chain.ExteriorObservations
+✔ [2484/2500] Built Chain.PrefixExtension
+✔ [2485/2500] Built Chain.JacobiSamples
+✔ [2486/2500] Built Chain.PrefixInstantiation
+✔ [2487/2500] Built Chain.PrefixPhysical
+✔ [2488/2500] Built Chain.PrefixGeometry
+✔ [2489/2500] Built Chain.PrefixTransfer
+✔ [2490/2500] Built Chain.Four
+✔ [2491/2500] Built Chain.FourCoefficients
+✔ [2492/2500] Built Chain.FourPencil
+✔ [2493/2500] Built Chain.FourBridge
+✔ [2494/2500] Built Chain.Coverage
+✔ [2495/2500] Built Chain.Between
+✔ [2496/2500] Built Chain.Assembly
+✔ [2497/2500] Built Chain.Classification
+✔ [2498/2500] Built Chain.GlobalCounterexample
+✔ [2499/2500] Built Chain
+Build completed successfully.
+Axiom audit passed for 1380 theorems
+'Catenary.sameCurves_iff_common_regular' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.Endpoint.observed_endpoint_global' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.Endpoint.observed_endpoint_generic' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.sameCurves_iff_finite' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.physical_necessity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.seven_negative' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.Cancellation.both_cancel' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.GlobalCounterexample.positive_global_counterexample' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'Catenary.GlobalCounterexample.regular_derivatives' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.GlobalCounterexample.open_positive_ambiguity' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.Reflection.generic_reflect' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.trajectory_unique' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.physical_transfer_formula' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.genericLocalID_of_witness' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.FourBridge.four_genericLocalID' depends on axioms: [propext, Classical.choice, Quot.sound]
+def Catenary.PhysicalClassification : Prop :=
+∀ (m : ℕ),
+  2 ≤ m →
+    ∀ (i j k ℓ : Catenary.Chamber m),
+      j < k → (Catenary.GenericLocalID i j k ℓ ↔ Catenary.placement (m + 1) (↑i + 1) (↑j + 1) (↑k + 1))
+'Catenary.sameCurves_iff_nonnegative_inputs' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.physical_between' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.EndpointThreshold.generic_endpoint_threshold' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.WitnessVariation.common_root_recovers_entries' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.PrefixInstantiation.instantiated_rank' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.PrefixGeometry.physical_chart' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.PrefixPhysical.generic_of_physical_splice' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.physical_left_interior' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.physicalClassificationVerified' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Catenary.physicalClassification_int' depends on axioms: [propext, Classical.choice, Quot.sound]
+Leak chamber 1: determinant -311040
+Leak chamber 2: determinant -198720
+Leak chamber 3: determinant -103680
+Leak chamber 4: determinant -51840
+Equal transfers at two distinct positive points. Determinants: (12, -24)
+Negative control rejected as expected (is false).
+Negative control rejected as expected (is false).
+Negative control rejected as expected (depends on disallowed axiom).
+Verified the complete physical classification, its boundary examples and negative controls.
+Source comparison with the release project: exact byte match.

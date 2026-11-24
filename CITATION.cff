@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you refer to this research note or formalization, please cite this versioned repository."
+title: "Two Outputs in a Catenary Compartmental Model"
+type: software
+authors:
+  - family-names: Aharodni
+    given-names: Mikita
+version: 0.1.0
+date-released: 2026-11-24
+url: https://github.com/qqhgdkktu/catenary-identifiability
+repository-code: https://github.com/qqhgdkktu/catenary-identifiability
+keywords:
+  - structural identifiability
+  - compartmental models
+  - Lean 4
