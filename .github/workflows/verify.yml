@@ -28,3 +28,10 @@ jobs:
         run: python3 verify.py --fetch --require-classification
       - name: Check proved global multiplicity statements and rational certificates
         run: python3 global-multiplicity/verify_global.py --fetch
+      - name: Check elimination-rate certificates with two exact methods
+        run: |
+          python3 -m venv "$RUNNER_TEMP/catenary-certificates"
+          py="$RUNNER_TEMP/catenary-certificates/bin/python"
+          "$py" -m pip install sympy==1.14.0
+          "$py" global-multiplicity/verification/verify_preterminal.py
+          "$py" global-multiplicity/verification/independent_preterminal_audit.py

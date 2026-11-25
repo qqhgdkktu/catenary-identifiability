@@ -30,7 +30,7 @@
 \vspace{.7em}
 {\large Mikita Aharodni\par}
 \vspace{.25em}
-{\small Research manuscript for independent review\quad $\cdot$ \quad 24 November 2026\par}
+{\small 25 November 2026\par}
 \end{center}
 \begin{abstract}
 Consider a bidirected path of \(n\ge4\) compartments with an inlet at the first
@@ -41,7 +41,12 @@ The maximum is one if the leak is at either measured compartment and two at
 every other leak location. The upper bound follows by expressing the distal
 gain as a concave minimum on an affine interval of endpoint spectral weights
 of a Jacobi matrix. A five-compartment example and two extension operations
-give sharpness for interior leaks at every chain length.
+give sharpness for interior leaks at every chain length. For a single leak
+at the penultimate compartment and \(n\ge5\), the two realizations have
+different elimination rates on a nonempty open set of data. With the two
+coprime spectral polynomials and the proximal gain fixed, at most one distal
+gain admits two regular solutions with the same elimination rate. Such a
+pair exists already for \(n=5\).
 \end{abstract}
 \noindent\textit{Keywords.} Structural identifiability, compartmental models,
 inverse spectral problems, Jacobi matrices, positive fibers.
@@ -463,21 +468,107 @@ function theorem supplies two disjoint positive branches over a common
 open neighborhood of their data.
 \end{proof}
 
-\section*{Verification and scope}
-The \href{https://github.com/qqhgdkktu/catenary-identifiability/tree/main/global-multiplicity}{accompanying repository} contains the source, exact certificates and formal proofs. The code computes the Jacobians at \eqref{eq:seed} over
-\(\mathbb{Q}\), checks the variational identity on 30 rational chains and
-tests both extensions, separately and in composition. The Lean~4 package
-verifies \(M(4,2)=2\), \(M(5,4)\ge2\), the physical observation map for all
-lengths, and several all-length spectral and variational lemmas. The full
-statement of Theorem~\ref{thm:main} is recorded in Lean. An end-to-end
-formal derivation for all \(n,\ell\) remains to be completed. The theorem is
-about regular positive fibers under exact observations. It does not enumerate
-singular fibers, infer the rate vector from noisy data, or determine the
-complex identifiability degree.
+\section{The elimination rate at the penultimate compartment}\label{sec:preterminal}
+An individual rate may take the same value in two different realizations.
+Clemens et al.\ studied this question for mammillary models with one input,
+one output and no leak \cite[Theorem~3.2]{clemens}. Huneke and Keen
+\cite[Proposition~4.5]{huneke} proved that the leak rate is globally identifiable
+in a strongly connected model with one input when the sole output is at the
+sole leak site. Here the leak site lies strictly between the two outputs.
 
-\smallskip
-\noindent\textit{Contributions.} Prepared for review by Mikita Aharodni.
-The initial proof was developed with GPT Pro and reviewed and partly formalized using Codex.
+\begin{theorem}\label{thm:preterminal}
+Let \(n\ge5\) and \(\ell=n-1\). On a nonempty Euclidean open set of coefficient
+data \((D,W,p,q)\), two positive regular realizations have distinct elimination
+rates \(h\). Their two output responses agree for every common input.
+
+Fix \(D,W,p\) with \(\gcd(D,W)=1\). Whenever two positive regular solutions
+occur at the same \(q\), their backward rates \(b_{n-1}\) are distinct.
+At most one value of \(q\) on this slice admits two such solutions with
+the same \(h\). This exception occurs for \(n=5\).
+\end{theorem}
+
+\begin{proof}
+Put \(g=q/D(0)>0\). Let \(z,v,r\) denote the last diagonal entries of
+\(T,T^2,T^{-1}\), respectively. They are the moments of orders \(1,2,-1\)
+of the endpoint spectral measure. The last compartment has no leak, so
+\(z=b_{n-1}\) and \(v=z^2+a_{n-1}b_{n-1}\).
+Equation~\eqref{eq:q} at \(\ell=n-1\) gives \(g=r-1/z\).
+For a constant unit input, the equilibrium \(x^*=(-A)^{-1}e_1\) satisfies
+\(h x^*_{n-1}=1\) by mass balance. The last compartment satisfies
+\(b_{n-1}x^*_n=a_{n-1}x^*_{n-1}\), with \(x^*_n=g\). It follows that
+\begin{equation}\label{eq:leak}
+ g=r-\frac1z,\qquad h=\frac{a_{n-1}}{g b_{n-1}}
+                    =\frac{v-z^2}{g z^2}.
+\end{equation}
+Here \(h\) denotes a first-order rate constant. The instantaneous amount lost
+per unit time is \(h x_{n-1}(t)\).
+
+On a nonempty slice with coprime \(D,W\) and fixed \(p\), normalization in
+\eqref{eq:weights} and \(P(0)=p[s^2]P\) cut out an affine line. The two
+conditions are independent since the latter is homogeneous and the former
+takes the value one. By Lemma~\ref{lem:coords}, positive realizations
+correspond bijectively to an open interval on this line. Each of \(z,v,r\)
+is affine in the spectral weights. If \(z\) is constant on the interval,
+then \(g\) is affine there. Two solutions at one level would force \(g\) to
+be constant on the entire interval, contradicting regularity. Thus on a slice
+containing a regular pair, \(z\) is an affine coordinate and distinguishes
+the two solutions. Write \(r=\alpha z+\beta\) and \(v=\gamma z+\delta\).
+Since \(v>0\), the pair \((\gamma,\delta)\) is nonzero.
+
+For distinct values \(x,y\) of \(z\) giving the same \(g\),
+\eqref{eq:leak} gives \(\alpha=-1/(xy)\) and
+\(1/x+1/y=\beta-g\). Subtracting the two expressions for \(h\) yields
+\[
+ g\bigl(h(x)-h(y)\bigr)
+ =\left(\frac1x-\frac1y\right)\bigl(\gamma-\delta(g-\beta)\bigr).
+\]
+Hence the two elimination rates agree precisely when
+\begin{equation}\label{eq:exception}
+ \gamma=\delta(g-\beta).
+\end{equation}
+If \(\delta=0\), then \(\gamma\ne0\), and equality is impossible. Otherwise
+the only candidate is \(q=D(0)(\beta+\gamma/\delta)\).
+
+For each \(n\ge5\), Theorem~\ref{thm:main} supplies two regular inverse
+branches over a common open set of data. For this leak location the
+construction uses the pair \eqref{eq:seed} and \(n-5\) applications of
+operation A. The open set contains data with coprime \(D,W\), since
+\(\Res(D,W)\) is a nonzero polynomial in their coefficients. Fix such
+\(D,W,p\) and vary \(q\) in the open set. At any level other than the one
+allowed by \eqref{eq:exception}, the two values of \(h\) differ.
+Continuity preserves this strict inequality in an open neighborhood
+in the full coefficient space.
+
+For an exceptional level take \(n=5,\ \ell=4\) and
+\begin{align*}
+ \theta_1&=(3,4,4,4,\ 3,2,4,1,\ 2),\\
+ \theta_2&=\left(\tfrac{44}{17},\tfrac{51}{11},\tfrac{10}{3},\tfrac{24}{5},\
+                 \tfrac{332}{187},\tfrac{11}{3},3,\tfrac65,\ 2\right).
+\end{align*}
+The determinant recurrence gives both vectors the data
+\[
+ D(s)=s^5+27s^4+230s^3+672s^2+560s+96,\quad
+ W(s)=s^2+11s+6,\quad (p,q)=(12,192).
+\]
+Here \(D\bmod W=-64(4s+3)\) and \(W(-3/4)=-27/16\).
+The two Jacobian determinants in the coordinate order of Section~\ref{sec:model}
+are \(-2359296\) and \(3760128\). Both points have \(h=2\), while
+\(b_4=1\) at the first and \(b_4=6/5\) at the second.
+\end{proof}
+
+Thus on a coprime slice with two regular solutions an independent exact
+measurement of \(b_{n-1}\) distinguishes them. A measurement of \(h\)
+distinguishes them at every level except a possible level \eqref{eq:exception}.
+
+\section*{Computations and formal verification}
+The \href{https://github.com/qqhgdkktu/catenary-identifiability/tree/global-multiplicity-v2/global-multiplicity}{source and verification package}
+includes two exact rational calculations of the examples in Section~\ref{sec:preterminal}.
+One uses matrix characteristic polynomials. The other differentiates the
+tridiagonal determinant recurrence symbolically. Lean~4 verifies
+\(M(4,2)=2\), \(M(5,4)\ge2\), several spectral identities for arbitrary
+chain length, and the algebraic equivalence and uniqueness in
+\eqref{eq:exception}. The existence of the two regular branches for every
+length is proved analytically in Sections~5--7.
 
 \begin{thebibliography}{9}
 \bibitem{bortner} C. Bortner, E. Gross, N. Meshkat, A. Shiu and S. Sullivant.
@@ -498,7 +589,13 @@ compartmental models: recent progress and future directions.
 \bibitem{castillo} K. Castillo and G. Gordillo-Núñez. Wendroff's theorem beyond
 consecutive degrees and related inverse spectral problems.
 \href{https://arxiv.org/abs/2602.20894v1}{arXiv:2602.20894v1} (2026).
-\bibitem{placement} M. Aharodni (prepared for review). Two outputs in a
+\bibitem{clemens} K. Clemens, J. Martinez, A. Shiu, M. Thompson and B. Warren.
+Parameter identifiability of linear-compartmental mammillary models.
+\href{https://arxiv.org/abs/2506.21889v2}{arXiv:2506.21889v2} (2025).
+\bibitem{huneke} T. Huneke and T. Keen. On the identifiability of linear
+compartmental model parameters. Texas A\&M University, REU research report,
+17 July 2025. \href{https://artsci.tamu.edu/mathematics/_files/_docs/reu/results/2025/huneke-keen-report.pdf}{Proposition~4.5}.
+\bibitem{placement} M. Aharodni. Two outputs in a
 catenary compartmental model. Research note and Lean formalization,
 \href{https://github.com/qqhgdkktu/catenary-identifiability/tree/v0.1.0}{version 0.1.0} (2026).
 \end{thebibliography}

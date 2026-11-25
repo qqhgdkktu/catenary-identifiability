@@ -14,7 +14,7 @@ The manuscript proves both directions for arbitrary length. [The Lean model](Cha
 
 ## Positive regular fibers with outputs at 3 and n
 
-A second [manuscript and verification package](global-multiplicity/README.md) determines the maximum number of positive regular solutions with inlet 1 and measured compartments 3 and $n$, for every $n\ge4$. The maximum is one if the leak is at a measured compartment and two at all other leak locations. The English manuscript gives an all-length analytical proof. The Lean verification of this second result is partial. [English PDF](global-multiplicity/paper/positive-multiplicity.pdf) · [LaTeX source](global-multiplicity/paper/positive-multiplicity.tex)
+A [second paper](global-multiplicity/README.md) counts the positive regular solutions for inlet 1 and measured compartments 3 and $n$. The maximum is one if the leak is at a measured compartment and two otherwise. When the leak is at $n-1$ and $n\ge5$, two solutions can give different elimination rates on an open set of data. The paper also characterizes when those rates coincide. [English PDF](global-multiplicity/paper/positive-multiplicity.pdf) · [Russian PDF](global-multiplicity/paper/positive-multiplicity-ru.pdf) · [Versioned release](https://github.com/qqhgdkktu/catenary-identifiability/releases/tag/global-multiplicity-v2)
 
 ## Reproduce the checks
 
@@ -42,6 +42,4 @@ To rebuild the English PDF, run `tectonic paper/two-output-catenary-identifiabil
 
 Ahmed et al. asked for a classification with multiple inputs or outputs in Section 6 of their article. The same placement rule for this one-inlet, two-output, one-leak setting follows from the broader theorem stated in the September 2026 unrefereed preprint *A placement criterion for catenary compartment models*. This repository gives a direct proof for the narrower setting and a formalization of that proof's conclusion. Appendix B of the manuscript spells out the specialization. [Ahmed et al., §6](https://doi.org/10.1137/25M1728636) · [Preprint, Theorem 1](https://zenodo.org/records/22909460)
 
-Prepared for review by **Mikita Aharodni**. OpenAI models used through Codex contributed to proof development, the Lean formalization, technical review, and English translation. This is a research note for independent specialist review.
-
-Please cite the [versioned release](https://github.com/qqhgdkktu/catenary-identifiability/releases/tag/v0.1.0) and the [citation metadata](CITATION.cff) when referring to this package.
+For the placement theorem, see [version 0.1.0](https://github.com/qqhgdkktu/catenary-identifiability/releases/tag/v0.1.0) and its [citation metadata](CITATION.cff). For the count of positive regular solutions, cite [the second paper, version 2](https://github.com/qqhgdkktu/catenary-identifiability/releases/tag/global-multiplicity-v2).

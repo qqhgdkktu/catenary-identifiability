@@ -26,7 +26,7 @@ def main():
     parser.add_argument("--require-all-n", action="store_true",
                         help="Also require a kernel proof of the full global SharpCount statement.")
     opts = parser.parse_args()
-    files = sorted(SOURCES.glob("Global*.lean"))
+    files = sorted(SOURCES.glob("*.lean"))
     if not files:
         raise SystemExit("Missing Lean proof sources.")
     tokens = re.compile(r'/\-|\-/|--[^\n]*|"(?:\\.|[^"\\])*"|\b(?:sorry|admit|axiom|unsafe|native_decide)\b')
@@ -51,9 +51,10 @@ def main():
     with tempfile.TemporaryDirectory(prefix="global-catenary-lean-") as tmp:
         scratch = Path(tmp).resolve()
         env = dict(os.environ, LEAN_PATH=str(scratch))
-        # Build dependencies from published source. Ignore all pre-existing Global*.olean.
+        # Compile each local import from the sources in this release.
+        local_modules = {source.stem for source in files}
         todo = {f.stem: {w for w in re.findall(r"^import (\w+)$", f.read_text(), re.M)
-                         if w.startswith("Global")} for f in files}
+                         if w in local_modules} for f in files}
         done = set()
         while todo:
             ready = sorted(k for k, imports in todo.items() if imports <= done)
