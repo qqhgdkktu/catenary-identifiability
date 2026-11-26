@@ -16,6 +16,12 @@ The manuscript proves both directions for arbitrary length. [The Lean model](Cha
 
 A [second paper](global-multiplicity/README.md) counts the positive regular solutions for inlet 1 and measured compartments 3 and $n$. The maximum is one if the leak is at a measured compartment and two otherwise. When the leak is at $n-1$ and $n\ge5$, two solutions can give different elimination rates on an open set of data. The paper also characterizes when those rates coincide. [English PDF](global-multiplicity/paper/positive-multiplicity.pdf) · [Russian PDF](global-multiplicity/paper/positive-multiplicity-ru.pdf) · [Versioned release](https://github.com/qqhgdkktu/catenary-identifiability/releases/tag/global-multiplicity-v2)
 
+## Choosing a third observation
+
+With the inlet at 1 and outputs already at 3 and $n$, every additional site gives generic global uniqueness. For a guarantee at **every positive parameter vector and every prescribed leak site**, all available sites work for $4\le n\le6$. For $n\ge7$ precisely sites 1, 2 and 4 work. At each other available site the analytical proof constructs a positive regular collision with the leak at 1. The paper also gives an exact seven-compartment pair with different elimination rates.
+
+[Russian manuscript](global-multiplicity/paper/third-observation-ru.pdf) · [LaTeX](global-multiplicity/paper/third-observation-ru.tex) · [Independent checks, prior results and Lean coverage](global-multiplicity/verification/third-observation-review.md)
+
 ## Reproduce the checks
 
 Install [elan](https://github.com/leanprover/elan) and Python 3. From the repository root, run

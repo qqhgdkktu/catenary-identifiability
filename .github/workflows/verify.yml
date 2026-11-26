@@ -35,3 +35,10 @@ jobs:
           "$py" -m pip install sympy==1.14.0
           "$py" global-multiplicity/verification/verify_preterminal.py
           "$py" global-multiplicity/verification/independent_preterminal_audit.py
+      - name: Check the third output and the inverse solver in exact arithmetic
+        run: |
+          py="$RUNNER_TEMP/catenary-certificates/bin/python"
+          "$py" global-multiplicity/verification/verify_reconstruction.py
+          "$py" global-multiplicity/verification/verify_third_sensor.py
+          "$py" global-multiplicity/verification/verify_seven_collision.py
+          "$py" global-multiplicity/verification/verify_exceptional_blocks.py

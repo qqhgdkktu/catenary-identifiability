@@ -25,6 +25,8 @@ def main():
     parser.add_argument("--fetch", action="store_true", help="Download pinned mathlib imports first.")
     parser.add_argument("--require-all-n", action="store_true",
                         help="Also require a kernel proof of the full global SharpCount statement.")
+    parser.add_argument("--require-third-theorem", action="store_true",
+                        help="Require an end-to-end kernel proof of the full third-observation theorem.")
     opts = parser.parse_args()
     files = sorted(SOURCES.glob("*.lean"))
     if not files:
@@ -70,7 +72,13 @@ def main():
                          +"#audit_catenary\n"
                          +"#check Catenary.GlobalMultiplicity.SharpCount\n"
                          +"#print axioms Catenary.GlobalMultiplicity.FourAudit.sharp_four_leak_two\n"
-                         +"#print axioms Catenary.GlobalFive.five_seed\n")
+                         +"#print axioms Catenary.GlobalFive.five_seed\n"
+                         +"#print axioms Catenary.ThirdObservation.uniform_sufficiency\n"
+                         +"#print axioms Catenary.ThirdObservation.generic_all_sites\n"
+                         +"#print axioms Catenary.ThirdObservation.full_iff_collision_family\n"
+                         +"#print axioms Catenary.ThirdObservation.seven_not_uniform\n"
+                         +"#print axioms Catenary.ThirdGeneric.generic_physical_unique\n"
+                         +"#print axioms Catenary.ThirdExceptional.normalized_slice_two_gains\n")
         run(["lake","env","lean",str(audit)],env)
         bad = scratch / "WrongDet.lean"
         bad.write_text("import GlobalFive\nopen Catenary.GlobalFive\n"
@@ -81,6 +89,21 @@ def main():
         if res.returncode == 0 or "type mismatch" not in message or "3457" not in message:
             raise SystemExit("Unexpected negative control result: "+message)
         print("Negative control: Lean rejected 3457 in place of 3456.",flush=True)
+        false_unique = scratch / "WrongUniqueness.lean"
+        false_unique.write_text("import ThirdObservation\nopen Catenary.ThirdObservation\n"
+                                "example : Uniqueness (m:=6) (by decide) 5 4 := seven_not_uniform\n")
+        res = subprocess.run(["lake","env","lean",str(false_unique)],cwd=ROOT,env=env,
+                             capture_output=True,text=True)
+        message = (res.stdout+res.stderr).lower()
+        if res.returncode == 0 or "type mismatch" not in message or "uniqueness" not in message:
+            raise SystemExit("Unexpected third-output negative control: "+message)
+        print("Negative control: Lean distinguished the seven-site collision from uniqueness.",flush=True)
+        if opts.require_third_theorem:
+            full = scratch / "ThirdClassification.lean"
+            full.write_text("".join(f"import {x}\n" for x in sorted(done))
+                            +"example : Catenary.ThirdObservation.FullClassification :=\n"
+                             "  Catenary.ThirdObservation.fullClassificationVerified\n")
+            run(["lake","env","lean",str(full)],env)
         if opts.require_all_n:
             full = scratch / "AllLengths.lean"
             full.write_text("".join(f"import {x}\n" for x in sorted(done))+

@@ -18,6 +18,21 @@ The paper proves the upper bound and its attainment for all chain lengths. At a 
 
 For $n\ge5$ with a leak at $n-1$, two regular solutions give different elimination rates $h$ on a nonempty open set of data. If the two spectral polynomials $D,W$ are coprime and the proximal gain $p$ is fixed, at most one distal gain $q$ admits two regular solutions with the same $h$. A five-compartment example attains this exceptional level. The backward rate $b_{n-1}$ distinguishes the two solutions even there.
 
+## Adding a third amount measurement
+
+The [research note in Russian](paper/third-observation-ru.pdf) proves generic positive global uniqueness for every additional site with inlet 1 and the original outputs 3 and n. For a guarantee at all positive rates and every prescribed leak site, every available site works through six compartments. For seven or more, precisely sites 1, 2 and 4 give this guarantee. Section 6 gives a rational seven-compartment counterexample with distinct elimination rates.
+
+`reconstruct_rates.py` accepts exact rational two-output data (`n`, `ell`, monic `D` and `W` in ascending powers, `p`, `q`) as JSON on stdin. It enumerates positive regular solutions on the coprime locus. Quote nonintegral fractions, such as `"25/4"`. With Python 3.10+ and SymPy 1.14.0, run the following from this directory:
+
+```sh
+python verification/verify_reconstruction.py
+python verification/verify_third_sensor.py
+python verification/verify_seven_collision.py
+python verification/verify_exceptional_blocks.py
+```
+
+The [technical review](verification/third-observation-review.md) gives the formal coverage for the third output, the direct specialization of the earlier two-output theorem, and a separate derivation of regularity on the spectral slice. The [Lean target](lean/ThirdObservation.lean) states the three physical conclusions. The arbitrary-length collision family still has a gap in the formalization between the spectral construction and physical regularity.
+
 ## Formal verification
 
 The full analytical claim is stated as `Catenary.GlobalMultiplicity.SharpCount`. The following parts have kernel proofs. There is no end-to-end Lean proof of `SharpCount` for all lengths in this package.
