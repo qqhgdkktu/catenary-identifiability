@@ -1,6 +1,6 @@
 import GlobalPhysical
 import ThirdAdjacent
-import ThirdSeven
+import ThirdSevenRegular
 import Chain.EndpointExterior
 import ThirdTerminal
 
@@ -109,6 +109,17 @@ theorem seven_not_uniform : ¬ Uniqueness (m:=6) (by decide) 5 4 := by
     fun u hu t ht => (h u hu t ht).symm
   exact hd (congrFun (H x y hx hy ⟨swap ha,swap hb⟩) (loss 6))
 
+/-- The seven-site rational example is regular for the original two-output
+physical map at both explicitly named rates. The leak is at site 5. -/
+theorem seven_regular_pair : RegularPair (m:=6) (by decide) 5 4 := by
+  let a := ThirdSevenRegular.overReal ThirdSeven.first
+  let b := ThirdSevenRegular.overReal ThirdSeven.second
+  obtain ⟨ha,hb,hneq,hcurves,hpen⟩ := ThirdSeven.named_collision
+  have swap {j k : Chamber 6} (h : SameCurves 0 j k 4 a b) : SameCurves 0 k j 4 a b :=
+    fun u hu t ht => (h u hu t ht).symm
+  exact ⟨a,b,ha,hb,fun eq => hneq (congrFun eq (loss 6)), ⟨swap hcurves,swap hpen⟩,
+    ThirdSevenRegular.physical_regular.1.ne,ThirdSevenRegular.physical_regular.2.ne'⟩
+
 /-- The outstanding all-length physical statement, with an inlet leak. -/
 def InletLeakCollisionFamily : Prop :=
   ∀ (m : ℕ) (hm : 3 ≤ m) (r : Chamber m), available r →
@@ -135,5 +146,6 @@ theorem full_iff_collision_family : FullClassification ↔ InletLeakCollisionFam
 #print axioms generic_middle
 #print axioms full_iff_collision_family
 #print axioms generic_all_sites
+#print axioms seven_regular_pair
 #print axioms seven_not_uniform
 end Catenary.ThirdObservation

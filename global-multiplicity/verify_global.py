@@ -77,6 +77,7 @@ def main():
                          +"#print axioms Catenary.ThirdObservation.generic_all_sites\n"
                          +"#print axioms Catenary.ThirdObservation.full_iff_collision_family\n"
                          +"#print axioms Catenary.ThirdObservation.seven_not_uniform\n"
+                         +"#print axioms Catenary.ThirdObservation.seven_regular_pair\n"
                          +"#print axioms Catenary.ThirdGeneric.generic_physical_unique\n"
                          +"#print axioms Catenary.ThirdExceptional.normalized_slice_two_gains\n")
         run(["lake","env","lean",str(audit)],env)
